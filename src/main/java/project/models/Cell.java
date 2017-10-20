@@ -19,6 +19,8 @@ public class Cell {
         this.y = y;
     }
     
+    public Cell(){}
+    
     public int getX() {
         return x;
     }

@@ -38,7 +38,6 @@ public class CellTest {
     @Test
     public void hashCodeTes1(){
         int hashCode = cellA.hashCode();
-        System.out.println(hashCode);
         if (hashCode != cellA.hashCode()) {
             fail("test is failed.");
         }
