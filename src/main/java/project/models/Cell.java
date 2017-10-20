@@ -14,6 +14,11 @@ public class Cell {
     private Status status;
     private ImageIcon icon;
 
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
     public int getX() {
         return x;
     }
@@ -61,10 +66,11 @@ public class Cell {
         int hashCode = 31;
         hashCode = hashCode * 17 + x;
         hashCode = hashCode * 17 + y;
-        hashCode = hashCode * 17 + status.toString().hashCode();
+        hashCode = hashCode * 17 + ((status == null) ? 0 : status.toString().hashCode());
         return hashCode;
     }
     
+    @Override
     public String toString(){
         return "Cell: [ x:" + x + " y:" + y +
                 " status: " + status + " ]";
