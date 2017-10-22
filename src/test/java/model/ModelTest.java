@@ -21,12 +21,13 @@ public class ModelTest {
     
     @Before
     public void before(){
-        model = new Model(16);
+        model = new Model(9);
     }
     
     @Test
     public void minesTest1(){
         Set<Cell> mines = model.getCells();
+        System.out.println(mines.size());
         Iterator iterator = mines.iterator();
         while(iterator.hasNext()){
             System.out.println(iterator.next());
@@ -38,6 +39,18 @@ public class ModelTest {
         for (int i = 0; i < 1000; i++) {
             Model model = new Model(16);
             assertEquals(model.getCells().size(), 40);
+        }
+    }
+    
+    @Test
+    public void numbersTest1(){
+        Set<Cell> cells = model.getCells();
+        Iterator iterator = cells.iterator();
+        while(iterator.hasNext()){
+            if (iterator.next() instanceof Number) {
+                Number number = (Number) iterator.next();
+                System.out.println(number);
+            }
         }
     }
 }
