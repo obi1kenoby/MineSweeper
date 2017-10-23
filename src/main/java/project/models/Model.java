@@ -1,20 +1,21 @@
 package project.models;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Alexander Naumov on 20.10.2017.
  * @version 1.0.0
  */
 
-public class Model {
+public final class Model {
 
     private int n;
     private int m;
-    private final HashSet<Cell> cells;
+    private final Set<Cell> cells = new HashSet<>() ;
     private final Random random;
 
-    public Model(int n) {
+    public Model(int n, int defaultX, int defaultY) {
         this.n = n;
         switch (n) {
             case 9:
@@ -24,16 +25,21 @@ public class Model {
                 m = 40;
                 break;
         }
+        
         random = new Random();
-        cells = new HashSet();
+        Cell defaultCell = new Cell(defaultX, defaultY);
+        defaultCell.setStatus(Status.EMPTY);
+        cells.add(defaultCell);
         createMines();
+        cells.remove(defaultCell);
         createNumbers();
+        crateEmpties();
     }
 
     private void createMines() {
         for (int i = 0; i < m; i++) {
             int x = random.nextInt(n)+1;
-            int y = 0;
+            int y;
             if(cells.size() > 0){
                 List<Integer> rangeY = ys(x);
                 y = rangeY.get(random.nextInt(rangeY.size()));
@@ -48,15 +54,16 @@ public class Model {
     }
     
     private void createNumbers(){
-        //todo
-        for (int x = 1; x <= n; x++) {
-            for (int y = 0; y <= n; y++) {
-                addNumbers(x,y);
+        Set<Cell> temp  = cells.stream().filter(cell -> !cell.getStatus().equals(Status.NUMBER)).collect(Collectors.toSet());
+        for(Cell cell: temp){
+            if (cells.contains(cell) && cell.getStatus().equals(Status.MINE)){
+                addNumbers(cell.getX(), cell.getY());
             }
         }
+
     }
 
-    public void addNumbers(int x, int y){
+    private void addNumbers(int x, int y){
         if (x == 1) {
             initNumber(x +1, y);
             if (y == 1) {
@@ -69,7 +76,7 @@ public class Model {
                 initNumber(x, y + 1);
                 initNumber(x + 1, y + 1);
             }
-            else{ //y == n
+            else{
                 initNumber(x, y - 1);
                 initNumber(x + 1, y - 1);
             }
@@ -89,7 +96,7 @@ public class Model {
                 initNumber(x, y + 1);
                 initNumber(x + 1, y + 1);
             }
-            else{   //y == n
+            else{
                 initNumber(x - 1, y - 1);
                 initNumber(x, y - 1);
                 initNumber(x + 1, y - 1);
@@ -97,8 +104,8 @@ public class Model {
         }else{
             initNumber(x - 1, y);
             if (y == 1) {
-                initNumber(x - 1, y - 1);
-                initNumber(x, y - 1);
+                initNumber(x - 1, y + 1);
+                initNumber(x, y + 1);
             }
             else if (1 < y && y < n) {
                 initNumber(x - 1, y - 1);
@@ -122,6 +129,7 @@ public class Model {
             }
         }else{
             Number number = new Number(x, y);
+            number.setValue(1);
             number.setStatus(Status.NUMBER);
             cells.add(number);
         }
@@ -134,6 +142,24 @@ public class Model {
             }
         }
         return null;
+    }
+    
+    private void crateEmpties(){
+        for (int x = 1; x <= n; x++) {
+            for (int y = 1; y <= n; y++) {
+                boolean noExist = false;
+                for(Cell cell: cells){
+                    if (cell.getX() == x && cell.getY() == y) {
+                        noExist = true;
+                    }
+                }
+                if (!noExist) {
+                    Cell empty = new Cell(x,y);
+                    empty.setStatus(Status.EMPTY);
+                    cells.add(empty);
+                }
+            }
+        }
     }
         
     private List<Integer> ys(int x){
