@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import project.models.Model;
+import project.models.Status;
 
 /**
  * @author Alexandr Naumov on 21.10.2017
@@ -29,25 +30,17 @@ public class ModelTest {
     }
 
     @Test
-    public void mines(){
+    public void model(){
         assertEquals(model.getCells().size(), medium * medium);
     }
 
     @Test
-    public void minesTest1() {
-        for(int i = 0; i < 10000; i++) {
-            int x = random.nextInt(medium) + 1;
-            int y = random.nextInt(medium) + 1;
-            assertEquals(new Model(medium, x, y).getCells().size(), medium * medium);
-        }
-    }
-
-    @Test
-    public void minesTest2() {
-        for(int i = 0; i < 10000; i++) {
-            int x = random.nextInt(beginner) + 1;
-            int y = random.nextInt(beginner) + 1;
-            assertEquals(new Model(beginner, x, y).getCells().size(), beginner * beginner);
-        }
+    public void mines() {
+        long count = model.getCells().
+                     stream().
+                     filter((cell) -> (cell.getStatus().equals(Status.MINE))).
+                     count();
+        assertEquals(count, 40);
     }
 }
+
