@@ -9,8 +9,6 @@ import javax.swing.*;
 
 public class Time implements Runnable {
 
-    private int seconds;
-    private int minuts;
     private final JLabel label;
 
     public Time(JLabel label) {
@@ -19,8 +17,8 @@ public class Time implements Runnable {
 
     @Override
     public void run() {
-        seconds = 0;
-        minuts = 0;
+        int seconds = 0;
+        int minuts = 0;
         while (true) {
             seconds++;
             try {

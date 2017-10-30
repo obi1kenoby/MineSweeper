@@ -3,11 +3,7 @@ package project.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * @author Alexander Naumov on 26.10.2017
@@ -23,14 +19,14 @@ public final class GameFrame extends JFrame {
     private JLabel flagLabel;
     private JButton[][] buttons;
     private final int n;
-    private final ImageIcon image = new ImageIcon("images\\default.png");
+    private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
 
     public GameFrame(int n) {
         this.n = n;
         init();
     }
 
-    public void init() {
+    private void init() {
         timeLabel = new JLabel();
         flagLabel = new JLabel();
         rootPanel = new JPanel(new BorderLayout(20, 20));
@@ -46,11 +42,10 @@ public final class GameFrame extends JFrame {
             flagLabel.setPreferredSize(new Dimension(100, 20));
         }
         buttons = new JButton[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                buttons[i][j] = new JButton();
-                buttons[i][j].setIcon(image);
-                buttonPanel.add(buttons[i][j]);
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                buttons[y][x] = new JButton();
+                buttonPanel.add(buttons[y][x]);
             }
         }
 
@@ -65,7 +60,10 @@ public final class GameFrame extends JFrame {
 
         pack();
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Mines v.1.0.1");
+        setIconImage(titleIcon.getImage());
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

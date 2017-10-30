@@ -3,6 +3,7 @@ package model;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,21 +18,21 @@ import project.models.Status;
 public class ModelTest {
 
     private Model model;
-    private Random random;
-    private static final int beginner = 9;
-    private static final int medium = 16;
+    private static final int N = 16;
+    private int x;
+    private int y;
 
     @Before
     public void before() {
-        random = new Random();
-        int x = random.nextInt(medium) + 1;
-        int y = random.nextInt(medium) + 1;
-        model = new Model(medium, x, y);
+        Random random = new Random();
+        x = random.nextInt(N) + 1;
+        y = random.nextInt(N) + 1;
+        model = new Model(N, x, y);
     }
 
     @Test
     public void model(){
-        assertEquals(model.getCells().size(), medium * medium);
+        assertEquals(model.getCells().size(), N * N);
     }
 
     @Test
@@ -41,6 +42,13 @@ public class ModelTest {
                      filter((cell) -> (cell.getStatus().equals(Status.MINE))).
                      count();
         assertEquals(count, 40);
+    }
+
+    @Test
+    public void firstNoMine(){
+        model.getCells().stream().filter((cell) -> (cell.getX() == x && cell.getY() == y)).
+                        filter((cell) -> (cell.getStatus().equals(Status.MINE))).
+                        forEachOrdered((_item) -> fail());
     }
 }
 

@@ -6,8 +6,8 @@ import project.models.Number;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Set;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.*;
+
 import project.models.Status;
 
 /**
@@ -19,7 +19,8 @@ public class MyMouseListener implements MouseListener {
 
     private final int x;
     private final int y;
-    private final JButton button;
+    private final int n;
+    private final JButton[][] buttons;
     private final Set<Cell> cells;
     private final ImageIcon accentuated = new ImageIcon("images\\accentuated.png");
     private final ImageIcon def = new ImageIcon("images\\default.png");
@@ -34,16 +35,17 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images\\7.png");
     private final ImageIcon eight = new ImageIcon("images\\8.png");
 
-    public MyMouseListener(JButton button, Set<Cell> cells, int x, int y) {
+    public MyMouseListener(Set<Cell> cells, int x, int y, int n, JButton[][] buttons) {
         this.x = x;
         this.y = y;
-        this.button = button;
+        this.n = n;
         this.cells = cells;
+        this.buttons = buttons;
     }
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
-        open(x,y);
+        openButton(x, y);
     }
 
     @Override
@@ -58,34 +60,30 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        button.setIcon(accentuated);
+        buttons[y][x].setIcon(accentuated);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        button.setIcon(def);
+        buttons[y][x].setIcon(def);
     }
 
-    private void setNumber(JButton button, Cell cell) {
-        switch (((Number) cell).getValue()) {
+    private void setNumber(JButton button, int value) {
+        button.setEnabled(false);
+        switch (value) {
             case 1:
-                button.setEnabled(false);
                 button.setDisabledIcon(one);
                 break;
             case 2:
-                button.setEnabled(false);
                 button.setDisabledIcon(two);
                 break;
             case 3:
-                button.setEnabled(false);
                 button.setDisabledIcon(three);
                 break;
             case 4:
-                button.setEnabled(false);
                 button.setDisabledIcon(four);
                 break;
             case 5:
-                button.setEnabled(false);
                 button.setDisabledIcon(five);
                 break;
             case 6:
@@ -100,20 +98,71 @@ public class MyMouseListener implements MouseListener {
         }
     }
 
-    private void open(int x, int y) {
-        for(Cell cell: cells){
-            if (cell.getX() == x +1 && cell.getY() == y +1) {
+    private void openButton(int x, int y) {
+        if (!buttons[y][x].isEnabled()){
+            return;
+        }
+        for (Cell cell : cells) {
+            if (cell.getX() == (x + 1) && cell.getY() == (y + 1)) {
                 Status status = cell.getStatus();
-                if (status.equals(Status.EMPTY)) {
-                    button.setEnabled(false);
-                    button.setDisabledIcon(empty);
-                }
-                else if (status.equals(Status.NUMBER)){
-                    setNumber(button, cell);
-                }
-                else{
-                    button.setEnabled(false);
-                    button.setDisabledIcon(mine);
+                switch (status) {
+                    case EMPTY:     //если пустая
+                        buttons[y][x].setEnabled(false);
+                        buttons[y][x].setDisabledIcon(empty);
+
+                        if (x == 0) {
+                            openButton(x + 1, y);
+                            if (y == 0) {
+                                openButton(x, y + 1);
+                                openButton(x + 1, y + 1);
+                            } else if (0 < y && y < n -1) {
+                                openButton(x, y - 1);
+                                openButton(x, y + 1);
+                                openButton(x + 1, y - 1);
+                                openButton(x + 1, y + 1);
+                            } else {
+                                openButton(x, y - 1);
+                                openButton(x + 1, y - 1);
+                            }
+                        } else if (0 < x && x < n - 1) {
+                            openButton(x + 1, y);
+                            openButton(x - 1, y);
+                            if (y == 0) {
+                                openButton(x, y + 1);
+                                openButton(x - 1, y + 1);
+                                openButton(x + 1, y + 1);
+                            } else if (0 < y && y < n - 1) {
+                                openButton(x - 1, y - 1);
+                                openButton(x + 1, y - 1);
+                                openButton(x, y - 1);
+                                openButton(x, y + 1);
+                                openButton(x - 1, y + 1);
+                                openButton(x + 1, y + 1);
+                            } else {
+                                openButton(x, y - 1);
+                                openButton(x - 1, y - 1);
+                                openButton(x + 1, y - 1);
+                            }
+                        } else {
+                            openButton(x - 1, y);
+                            if (y == 0) {
+                                openButton(x, y + 1);
+                                openButton(x - 1, y + 1);
+                            } else if (0 < y && y < n - 1) {
+                                openButton(x, y - 1);
+                                openButton(x, y + 1);
+                                openButton(x - 1, y - 1);
+                                openButton(x - 1, y + 1);
+                            } else {
+                                openButton(x, y - 1);
+                                openButton(x - 1, y - 1);
+                            }
+                        }
+                        break;
+                    case NUMBER:
+                        int value = ((Number) cell).getValue();
+                        setNumber(buttons[y][x], value);
+                        break;
                 }
             }
         }

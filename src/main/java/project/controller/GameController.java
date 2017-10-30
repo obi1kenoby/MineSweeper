@@ -1,9 +1,8 @@
 package project.controller;
 
-import java.util.Set;
 import javax.swing.JButton;
+import project.helpers.PaintField;
 import project.helpers.Time;
-import project.models.Cell;
 import project.models.Model;
 import project.view.GameFrame;
 
@@ -27,11 +26,11 @@ public class GameController {
     }
 
     public void play(){
+        new Thread(new PaintField(n, view.getButtons())).start();
         JButton[][] buttons = view.getButtons();
-        Set<Cell> cells = model.getCells();
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
-                buttons[x][y].addMouseListener(new MyMouseListener(buttons[x][y], model.getCells(), x, y));
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                buttons[y][x].addMouseListener(new MyMouseListener(model.getCells(), x, y, n, buttons));
             }
         }
     }
