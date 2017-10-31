@@ -11,7 +11,7 @@ import project.controller.GameController;
 public class Launcher {
     public static void main(String[] args){
         EventQueue.invokeLater(() ->{
-            GameController controller = new GameController(16);
+            GameController controller = new GameController(9);
             controller.play();
         });
     }
