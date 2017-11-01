@@ -1,10 +1,11 @@
 package project.controller;
 
-import javax.swing.JButton;
 import project.helpers.PaintField;
 import project.helpers.Time;
 import project.models.Model;
 import project.view.GameFrame;
+
+import javax.swing.*;
 
 /**
  * @author Alexander Naumov on 26.10.2017
@@ -14,24 +15,22 @@ import project.view.GameFrame;
 public class GameController {
 
     private final GameFrame view;
-    private final Model model;
-    private final int n;
-
+    private Model model = null;
 
     public GameController(int n) {
-        this.n = n;
         view = new GameFrame(n);
-        model = new Model(n, 4, 1);
         new Thread(new Time(view.getTimeLabel())).start();
     }
 
     public void play(){
-        new Thread(new PaintField(n, view.getButtons())).start();
+        new Thread(new PaintField(view.getHeightField(), view.getWidthField(), view.getButtons())).start();
         JButton[][] buttons = view.getButtons();
-        for (int y = 0; y < n; y++) {
-            for (int x = 0; x < n; x++) {
-                buttons[y][x].addMouseListener(new MyMouseListener(model.getCells(), x, y, n, buttons));
+        for (int x = 0; x < view.getHeightField(); x++) {
+            for (int y = 0; y < view.getWidthField(); y++) {
+                buttons[x][y].addMouseListener(new MyMouseListener(model, x, y, view.getN(), view.getHeightField(), view.getWidthField(), buttons));
             }
         }
+
+        view.getClose().addActionListener(e -> System.exit(0));
     }
 }

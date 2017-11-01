@@ -18,7 +18,7 @@ public class Time implements Runnable {
     @Override
     public void run() {
         int seconds = 0;
-        int minuts = 0;
+        int minutes = 0;
         while (true) {
             seconds++;
             try {
@@ -27,23 +27,23 @@ public class Time implements Runnable {
                 e.printStackTrace();
             }
             if (seconds == 60) {
-                minuts++;
-                if (minuts == 60) {
-                    minuts = 0;
+                minutes++;
+                if (minutes == 60) {
+                    minutes = 0;
                 }
                 seconds = 0;
             }
-            if (minuts < 10) {
+            if (minutes < 10) {
                 if (seconds < 10) {
-                   label.setText("0" + minuts + ":0" + seconds);
+                   label.setText("0" + minutes + ":0" + seconds);
                 } else {
-                    label.setText("0" + minuts + ":" + seconds);
+                    label.setText("0" + minutes + ":" + seconds);
                 }
             } else {
                 if (seconds < 10) {
-                    label.setText(minuts + ":0" + seconds);
+                    label.setText(minutes + ":0" + seconds);
                 } else {
-                    label.setText(minuts + ":" + seconds);
+                    label.setText(minutes + ":" + seconds);
                 }
             }
         }

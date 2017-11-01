@@ -11,12 +11,14 @@ import java.util.*;
 
 public class PaintField implements Runnable {
 
-    private final int n;
+    private final int height;
+    private final int width;
     private final JButton[][] buttons;
     private final ImageIcon image = new ImageIcon("images\\default.png");
 
-    public PaintField(int n, JButton[][] buttons) {
-        this.n = n;
+    public PaintField(int height, int width, JButton[][] buttons) {
+        this.height = height;
+        this.width = width;
         this.buttons = buttons;
     }
 
@@ -24,26 +26,26 @@ public class PaintField implements Runnable {
     public void run() {
         int counter = 0;
         Random random = new Random();
-        while (counter < (n * n)){
+        while (counter < (height * width)){
             List<Integer> xs = xRange();
             int x = xs.get(random.nextInt(xs.size()));
             List<Integer> ys = yRange(x);
             int y = ys.get(random.nextInt(ys.size()));
             buttons[x][y].setIcon(image);
+
             try {
-                Thread.sleep(10);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             counter++;
         }
-        System.out.println("complete.");
     }
 
     private List<Integer> yRange(int currentX) {
         List<Integer> list = new ArrayList<>();
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
+        for (int x = 0; x < height; x++) {
+            for (int y = 0; y < width; y++) {
                 if (currentX == x && buttons[x][y].getIcon() == null) {
                     list.add(y);
                 }
@@ -54,8 +56,8 @@ public class PaintField implements Runnable {
 
     private List<Integer> xRange() {
         List<Integer> list = new ArrayList<>();
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
+        for (int x = 0; x < height; x++) {
+            for (int y = 0; y < width; y++) {
                 if (buttons[x][y].getIcon() == null) {
                     list.add(x);
                 }

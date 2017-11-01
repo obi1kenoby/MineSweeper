@@ -10,24 +10,30 @@ import java.util.stream.Collectors;
 
 public final class Model {
 
-    private int n;
-    private int m;
+    private int height;
+    private int width;
+    private int totalMines;
     private final Set<Cell> cells = new HashSet<>() ;
     private final Random random;
+    private static Model model;
 
-    public Model(int n, int defaultX, int defaultY) {
-        this.n = n;
-        switch (n) {
-            case 9:
-                m = 10;
-                break;
-            case 16:
-                m = 40;
-                break;
+    private Model(int n, int inputX, int inputY) {
+        if (n == 9){
+            totalMines = 10;
+            width = n;
+            height = n;
+        }else if (n == 16){
+            totalMines = 40;
+            width = n;
+            height = n;
         }
-        
+        else {
+            totalMines = 99;
+            width = 30;
+            height = 16;
+        }
         random = new Random();
-        Cell defaultCell = new Cell(defaultX, defaultY);
+        Cell defaultCell = new Cell(inputX, inputY);
         defaultCell.setStatus(Status.EMPTY);
         cells.add(defaultCell);
         createMines();
@@ -37,15 +43,15 @@ public final class Model {
     }
 
     private void createMines() {
-        for (int i = 0; i < m; i++) {
-            int x = random.nextInt(n)+1;
+        for (int i = 0; i < totalMines; i++) {
+            int x = random.nextInt(height)+1;
             int y;
             if(cells.size() > 0){
-                List<Integer> rangeY = ys(x);
-                y = rangeY.get(random.nextInt(rangeY.size()));
+                List<Integer> yRange = yAxis(x);
+                y = yRange.get(random.nextInt(yRange.size()));
             }
             else{
-                y = random.nextInt(n)+1;
+                y = random.nextInt(width)+1;
             }
             Cell cell = new Cell(x,y);
             cell.setStatus(Status.MINE);
@@ -60,7 +66,6 @@ public final class Model {
                 addNumbers(cell.getX(), cell.getY());
             }
         }
-
     }
 
     private void addNumbers(int x, int y){
@@ -70,7 +75,7 @@ public final class Model {
                 initNumber(x, y +1);
                 initNumber(x + 1, y + 1);
             }
-            else if (1 < y && y < n){
+            else if (1 < y && y < width){
                 initNumber(x, y - 1);
                 initNumber(x + 1, y - 1);
                 initNumber(x, y + 1);
@@ -80,7 +85,7 @@ public final class Model {
                 initNumber(x, y - 1);
                 initNumber(x + 1, y - 1);
             }
-        }else if (1 < x && x < n){
+        }else if (1 < x && x < height){
             initNumber(x + 1, y);
             initNumber(x - 1, y);
             if (y == 1) {
@@ -88,7 +93,7 @@ public final class Model {
                 initNumber(x, y + 1);
                 initNumber(x + 1, y + 1);
             }
-            else if (1 < y && y < n) {
+            else if (1 < y && y < width) {
                 initNumber(x - 1, y - 1);
                 initNumber(x, y - 1);
                 initNumber(x + 1, y - 1);
@@ -107,7 +112,7 @@ public final class Model {
                 initNumber(x - 1, y + 1);
                 initNumber(x, y + 1);
             }
-            else if (1 < y && y < n) {
+            else if (1 < y && y < width) {
                 initNumber(x - 1, y - 1);
                 initNumber(x, y - 1);
                 initNumber(x - 1, y + 1);
@@ -145,8 +150,8 @@ public final class Model {
     }
     
     private void crateEmpties(){
-        for (int x = 1; x <= n; x++) {
-            for (int y = 1; y <= n; y++) {
+        for (int x = 1; x <= height; x++) {
+            for (int y = 1; y <= width; y++) {
                 boolean noExist = false;
                 for(Cell cell: cells){
                     if (cell.getX() == x && cell.getY() == y) {
@@ -162,9 +167,9 @@ public final class Model {
         }
     }
         
-    private List<Integer> ys(int x){
+    private List<Integer> yAxis(int x){
         List<Integer> list = new ArrayList();
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= width; i++) {
             list.add(i);
         }
         cells.stream().filter((cell) -> (cell.getX() == x && list.contains(cell.getY()))).forEachOrdered((cell) -> {
@@ -179,5 +184,12 @@ public final class Model {
 
     public Set<Cell> getCells() {
         return cells;
+    }
+
+    public static Model getModel(int n, int inputX, int inputY){
+        if (model == null){
+            model = new Model(n, inputX, inputY);
+        }
+        return model;
     }
 }

@@ -12,45 +12,73 @@ import javax.swing.*;
 
 public final class GameFrame extends JFrame {
 
-    private JPanel buttonPanel;
-    private JPanel southPanel;
-    private JPanel rootPanel;
     private JLabel timeLabel;
-    private JLabel flagLabel;
     private JButton[][] buttons;
+    private JMenuItem close;
+    private final int heightField;
+    private final int widthField;
     private final int n;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
 
     public GameFrame(int n) {
         this.n = n;
+        if (n == 9){
+            widthField = n;
+            heightField = n;
+        }else if (n == 16){
+            widthField = n;
+            heightField = n;
+        }
+        else {
+            widthField = 30;
+            heightField = 16;
+        }
         init();
     }
 
     private void init() {
         timeLabel = new JLabel();
-        flagLabel = new JLabel();
-        rootPanel = new JPanel(new BorderLayout(20, 20));
-        southPanel = new JPanel(new GridLayout(1, 2));
-        buttonPanel = new JPanel(new GridLayout(n, n));
-        if (n == 16) {
-            buttonPanel.setPreferredSize(new Dimension(420, 420));
-            timeLabel.setPreferredSize(new Dimension(175, 40));
-            flagLabel.setPreferredSize(new Dimension(175, 40));
-        } else {
-            buttonPanel.setPreferredSize(new Dimension(200, 200));
-            timeLabel.setPreferredSize(new Dimension(100, 20));
-            flagLabel.setPreferredSize(new Dimension(100, 20));
+        JPanel rootPanel = new JPanel(new BorderLayout(20, 20));
+        JPanel southPanel = new JPanel(new GridLayout(1, 2));
+        JPanel buttonPanel = new JPanel(new GridLayout(heightField, widthField));
+        Dimension field;
+        if (widthField == 16) {
+            field = new Dimension(420,420);
+        } else if (widthField == 9){
+            field = new Dimension(200, 200);
+        }else {
+            field = new Dimension(788, 420);
         }
-        buttons = new JButton[n][n];
-        for (int y = 0; y < n; y++) {
-            for (int x = 0; x < n; x++) {
-                buttons[y][x] = new JButton();
-                buttonPanel.add(buttons[y][x]);
+
+        buttonPanel.setPreferredSize(field);
+        timeLabel.setPreferredSize(new Dimension(200, 20));
+
+
+        buttons = new JButton[heightField][widthField];
+        for (int x = 0; x < heightField; x++) {
+            for (int y = 0; y < widthField; y++) {
+                buttons[x][y] = new JButton();
+                buttonPanel.add(buttons[x][y]);
             }
         }
 
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        JMenu game = new JMenu("Игра");
+        JMenuItem newGame = new JMenuItem("Новая игра");
+        JMenuItem settings = new JMenuItem("Параметры");
+        close = new JMenuItem("Выйти");
+        JMenuItem info = new JMenuItem("О программе");
+        JMenu about = new JMenu("Справка");
+        game.add(newGame);
+        game.add(settings);
+        game.add(close);
+
+        about.add(info);
+        menuBar.add(game);
+        menuBar.add(about);
+
         southPanel.add(timeLabel);
-        southPanel.add(flagLabel);
         rootPanel.add(new JPanel(), BorderLayout.EAST);
         rootPanel.add(new JPanel(), BorderLayout.WEST);
         rootPanel.add(new JPanel(), BorderLayout.NORTH);
@@ -67,6 +95,14 @@ public final class GameFrame extends JFrame {
         setVisible(true);
     }
 
+    public JMenuItem getClose() {
+        return close;
+    }
+
+    public int getN() {
+        return n;
+    }
+
     public JButton[][] getButtons() {
         return buttons;
     }
@@ -75,7 +111,11 @@ public final class GameFrame extends JFrame {
         return timeLabel;
     }
 
-    public JLabel getFlagLabel() {
-        return flagLabel;
+    public int getHeightField() {
+        return heightField;
+    }
+
+    public int getWidthField() {
+        return widthField;
     }
 }

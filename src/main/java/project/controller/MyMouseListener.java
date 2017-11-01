@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.models.Cell;
+import project.models.Model;
 import project.models.Number;
 
 import java.awt.event.MouseEvent;
@@ -19,7 +20,9 @@ public class MyMouseListener implements MouseListener {
 
     private final int x;
     private final int y;
-    private final int n;
+    private Model model;
+    private final int height;
+    private final int width;
     private final JButton[][] buttons;
     private final Set<Cell> cells;
     private final ImageIcon accentuated = new ImageIcon("images\\accentuated.png");
@@ -35,12 +38,14 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images\\7.png");
     private final ImageIcon eight = new ImageIcon("images\\8.png");
 
-    public MyMouseListener(Set<Cell> cells, int x, int y, int n, JButton[][] buttons) {
+    public MyMouseListener(Model model, int x, int y, int n, int height, int width, JButton[][] buttons) {
         this.x = x;
         this.y = y;
-        this.n = n;
-        this.cells = cells;
+        this.width = width;
+        this.height = height;
         this.buttons = buttons;
+        this.model = model;
+        cells = Model.getModel(n, x, y).getCells();
     }
 
     @Override
@@ -60,12 +65,12 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        buttons[y][x].setIcon(accentuated);
+        buttons[x][y].setIcon(accentuated);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        buttons[y][x].setIcon(def);
+        buttons[x][y].setIcon(def);
     }
 
     private void setNumber(JButton button, int value) {
@@ -99,23 +104,22 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void openButton(int x, int y) {
-        if (!buttons[y][x].isEnabled()){
+        if (!buttons[x][y].isEnabled()) {
             return;
         }
         for (Cell cell : cells) {
             if (cell.getX() == (x + 1) && cell.getY() == (y + 1)) {
                 Status status = cell.getStatus();
                 switch (status) {
-                    case EMPTY:     //если пустая
-                        buttons[y][x].setEnabled(false);
-                        buttons[y][x].setDisabledIcon(empty);
-
+                    case EMPTY:
+                        buttons[x][y].setEnabled(false);
+                        buttons[x][y].setDisabledIcon(empty);
                         if (x == 0) {
                             openButton(x + 1, y);
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x + 1, y + 1);
-                            } else if (0 < y && y < n -1) {
+                            } else if (0 < y && y < width - 1) {
                                 openButton(x, y - 1);
                                 openButton(x, y + 1);
                                 openButton(x + 1, y - 1);
@@ -124,14 +128,14 @@ public class MyMouseListener implements MouseListener {
                                 openButton(x, y - 1);
                                 openButton(x + 1, y - 1);
                             }
-                        } else if (0 < x && x < n - 1) {
+                        } else if (0 < x && x < height - 1) {
                             openButton(x + 1, y);
                             openButton(x - 1, y);
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x - 1, y + 1);
                                 openButton(x + 1, y + 1);
-                            } else if (0 < y && y < n - 1) {
+                            } else if (0 < y && y < width - 1) {
                                 openButton(x - 1, y - 1);
                                 openButton(x + 1, y - 1);
                                 openButton(x, y - 1);
@@ -148,7 +152,7 @@ public class MyMouseListener implements MouseListener {
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x - 1, y + 1);
-                            } else if (0 < y && y < n - 1) {
+                            } else if (0 < y && y < width - 1) {
                                 openButton(x, y - 1);
                                 openButton(x, y + 1);
                                 openButton(x - 1, y - 1);
@@ -161,10 +165,18 @@ public class MyMouseListener implements MouseListener {
                         break;
                     case NUMBER:
                         int value = ((Number) cell).getValue();
-                        setNumber(buttons[y][x], value);
+                        setNumber(buttons[x][y], value);
                         break;
+                    case MINE:
+                        buttons[x][y].setEnabled(false);
+                        buttons[x][y].setDisabledIcon(mine);
+                        gameOver();
                 }
             }
         }
+    }
+
+    private void gameOver() {
+
     }
 }
