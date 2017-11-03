@@ -4,6 +4,7 @@ import project.models.Cell;
 import project.models.Model;
 import project.models.Number;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Set;
@@ -20,14 +21,15 @@ public class MyMouseListener implements MouseListener {
 
     private final int x;
     private final int y;
-    private Model model;
     private final int height;
     private final int width;
     private final JButton[][] buttons;
-    private final Set<Cell> cells;
+    private Set<Cell> cells;
+    private int n;
     private final ImageIcon accentuated = new ImageIcon("images\\accentuated.png");
     private final ImageIcon def = new ImageIcon("images\\default.png");
     private final ImageIcon mine = new ImageIcon("images\\mine.png");
+    private final ImageIcon flag = new ImageIcon("images\\flag.png");
     private final ImageIcon empty = new ImageIcon("images\\empty.png");
     private final ImageIcon one = new ImageIcon("images\\1.png");
     private final ImageIcon two = new ImageIcon("images\\2.png");
@@ -38,24 +40,37 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images\\7.png");
     private final ImageIcon eight = new ImageIcon("images\\8.png");
 
-    public MyMouseListener(Model model, int x, int y, int n, int height, int width, JButton[][] buttons) {
+    public MyMouseListener(int x, int y, int n, int height, int width, JButton[][] buttons) {
         this.x = x;
         this.y = y;
+        this.n = n;
         this.width = width;
         this.height = height;
         this.buttons = buttons;
-        this.model = model;
-        cells = Model.getModel(n, x, y).getCells();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        openButton(x, y);
+        int modifiers = e.getModifiers();
+        if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+            Model model = Model.getModel(n, x+1, y+1);
+            cells = model.getCells();
+            openButton(x, y);
+        }
+        if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+            if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(flag)){
+                buttons[x][y].setEnabled(true);
+                buttons[x][y].setDisabledIcon(def);
+            }
+            else if (buttons[x][y].isEnabled()){
+                buttons[x][y].setEnabled(false);
+                buttons[x][y].setDisabledIcon(flag);
+            }
+        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
@@ -65,12 +80,16 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        buttons[x][y].setIcon(accentuated);
+        if (!buttons[x][y].getIcon().equals(flag)) {
+            buttons[x][y].setIcon(accentuated);
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        buttons[x][y].setIcon(def);
+        if (!buttons[x][y].getIcon().equals(flag)) {
+            buttons[x][y].setIcon(def);
+        }
     }
 
     private void setNumber(JButton button, int value) {
@@ -104,7 +123,7 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void openButton(int x, int y) {
-        if (!buttons[x][y].isEnabled()) {
+        if (!buttons[x][y].isEnabled()){
             return;
         }
         for (Cell cell : cells) {
@@ -177,6 +196,6 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void gameOver() {
-
+        System.out.println("GAME OVER!");
     }
 }

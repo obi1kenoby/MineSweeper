@@ -15,7 +15,6 @@ import javax.swing.*;
 public class GameController {
 
     private final GameFrame view;
-    private Model model = null;
 
     public GameController(int n) {
         view = new GameFrame(n);
@@ -27,7 +26,7 @@ public class GameController {
         JButton[][] buttons = view.getButtons();
         for (int x = 0; x < view.getHeightField(); x++) {
             for (int y = 0; y < view.getWidthField(); y++) {
-                buttons[x][y].addMouseListener(new MyMouseListener(model, x, y, view.getN(), view.getHeightField(), view.getWidthField(), buttons));
+                buttons[x][y].addMouseListener(new MyMouseListener(x, y, view.getN(), view.getHeightField(), view.getWidthField(), buttons));
             }
         }
 

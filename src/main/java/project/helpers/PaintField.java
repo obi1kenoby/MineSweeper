@@ -26,7 +26,7 @@ public class PaintField implements Runnable {
     public void run() {
         int counter = 0;
         Random random = new Random();
-        while (counter < (height * width)){
+        while (xRange().size() > 0){
             List<Integer> xs = xRange();
             int x = xs.get(random.nextInt(xs.size()));
             List<Integer> ys = yRange(x);
@@ -40,6 +40,7 @@ public class PaintField implements Runnable {
             }
             counter++;
         }
+        System.out.println(counter);
     }
 
     private List<Integer> yRange(int currentX) {
@@ -59,7 +60,7 @@ public class PaintField implements Runnable {
         for (int x = 0; x < height; x++) {
             for (int y = 0; y < width; y++) {
                 if (buttons[x][y].getIcon() == null) {
-                    list.add(x);
+                    if (!list.contains(x)) list.add(x);
                 }
             }
         }

@@ -1,8 +1,6 @@
 package project.view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.*;
 import javax.swing.*;
 
 /**
@@ -40,7 +38,11 @@ public final class GameFrame extends JFrame {
         timeLabel = new JLabel();
         JPanel rootPanel = new JPanel(new BorderLayout(20, 20));
         JPanel southPanel = new JPanel(new GridLayout(1, 2));
-        JPanel buttonPanel = new JPanel(new GridLayout(heightField, widthField));
+        GridLayout layout = new GridLayout(heightField, widthField);
+        layout.setVgap(1);
+        layout.setHgap(1);
+        JPanel buttonPanel = new JPanel(layout);
+        buttonPanel.setBackground(Color.black);
         Dimension field;
         if (widthField == 16) {
             field = new Dimension(420,420);
@@ -58,20 +60,23 @@ public final class GameFrame extends JFrame {
         for (int x = 0; x < heightField; x++) {
             for (int y = 0; y < widthField; y++) {
                 buttons[x][y] = new JButton();
+                buttons[x][y].setFocusPainted(false);
                 buttonPanel.add(buttons[x][y]);
             }
         }
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-        JMenu game = new JMenu("Игра");
+        JMenu game = new JMenu("Game");
         JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
-        JMenu about = new JMenu("Справка");
+        JMenu about = new JMenu("About");
         game.add(newGame);
+        game.add(new JPopupMenu.Separator());
         game.add(settings);
+        game.add(new JPopupMenu.Separator());
         game.add(close);
 
         about.add(info);

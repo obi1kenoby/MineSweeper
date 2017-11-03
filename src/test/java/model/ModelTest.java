@@ -20,7 +20,7 @@ import project.models.Status;
 public class ModelTest {
 
     private Model model;
-    private static final int N = 16;
+    private static final int N = 9;
     private int x;
     private int y;
 
@@ -43,7 +43,7 @@ public class ModelTest {
                      stream().
                      filter((cell) -> (cell.getStatus().equals(Status.MINE))).
                      count();
-        assertEquals(count, 40);
+        assertEquals(count, 10);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ModelTest {
 
     @Test
     public void test(){
-        assertEquals(model.getCells().size(), 256);
+        assertEquals(model.getCells().size(), 81);
         ArrayList<Cell> mines = new ArrayList<>();
         ArrayList<Cell> numbers = new ArrayList<>();
         ArrayList<Cell> empties = new ArrayList<>();
