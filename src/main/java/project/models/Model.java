@@ -1,7 +1,6 @@
 package project.models;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Alexander Naumov on 20.10.2017.
@@ -12,184 +11,176 @@ public final class Model {
 
     private int height;
     private int width;
+    private int X;
+    private int Y;
     private int totalMines;
-    private final Set<Cell> cells = new HashSet<>();
+    private Set<Cell> cells = new HashSet<>();
     private final Random random;
-    private static Model model;
 
-    private Model(int n, int inputX, int inputY) {
-        if (n == 9) {
-            totalMines = 10;
-            width = n;
-            height = n;
-        } else if (n == 16) {
-            totalMines = 40;
-            width = n;
-            height = n;
-        } else {
-            totalMines = 99;
-            width = 30;
-            height = 16;
+    public Model(int n, int inputX, int inputY) {
+        this.X = inputX;
+        this.Y = inputY;
+        switch (n) {
+            case 9:
+                totalMines = 10;
+                width = n;
+                height = n;
+                break;
+            case 16:
+                totalMines = 40;
+                width = n;
+                height = n;
+                break;
+            default:
+                totalMines = 99;
+                width = 30;
+                height = 16;
+                break;
         }
         random = new Random();
-        Cell inputCell = new Cell(inputX, inputY);
-        inputCell.setStatus(Status.EMPTY);
-        cells.add(inputCell);
-        createMines();
-        cells.remove(inputCell);
-        createNumbers();
-        crateEmpties();
-        for (Cell cell : cells) {
-            if (cell.getStatus().equals(Status.MINE)) {
-                System.out.print((cell.getX() + "-" + cell.getY()) + " ");
-            }
-        }
     }
 
-    private void createMines() {
-        for (int i = 0; i < totalMines; i++) {
-            int x = xAxis().get(random.nextInt(xAxis().size()));
-            List<Integer> yRange = yAxis(x);
-            int y = yRange.get(random.nextInt(yRange.size()));
-            Cell cell = new Cell(x, y);
-            cell.setStatus(Status.MINE);
-            cells.add(cell);
-        }
-    }
+    public void createNumbers(){
+        for(Cell cell: cells) {
+            if (cell.getStatus() == Status.MINE) {
+                int x = cell.getX();
+                int y = cell.getY();
 
-    private void createNumbers() {
-        Set<Cell> temp = cells.stream().filter(cell -> !cell.getStatus().equals(Status.NUMBER)).collect(Collectors.toSet());
-        for (Cell cell : temp) {
-            if (cells.contains(cell) && cell.getStatus().equals(Status.MINE)) {
-                addNumbers(cell.getX(), cell.getY());
-            }
-        }
-    }
+                if (x == 1) {
+                    if (y == 1) {
 
-    private void addNumbers(int x, int y) {
-        if (x == 1) {
-            initNumber(x + 1, y);
-            if (y == 1) {
-                initNumber(x, y + 1);
-                initNumber(x + 1, y + 1);
-            } else if (1 < y && y < width) {
-                initNumber(x, y - 1);
-                initNumber(x + 1, y - 1);
-                initNumber(x, y + 1);
-                initNumber(x + 1, y + 1);
-            } else {
-                initNumber(x, y - 1);
-                initNumber(x + 1, y - 1);
-            }
-        } else if (1 < x && x < height) {
-            initNumber(x + 1, y);
-            initNumber(x - 1, y);
-            if (y == 1) {
-                initNumber(x - 1, y + 1);
-                initNumber(x, y + 1);
-                initNumber(x + 1, y + 1);
-            } else if (1 < y && y < width) {
-                initNumber(x - 1, y - 1);
-                initNumber(x, y - 1);
-                initNumber(x + 1, y - 1);
-                initNumber(x - 1, y + 1);
-                initNumber(x, y + 1);
-                initNumber(x + 1, y + 1);
-            } else {
-                initNumber(x - 1, y - 1);
-                initNumber(x, y - 1);
-                initNumber(x + 1, y - 1);
-            }
-        } else {
-            initNumber(x - 1, y);
-            if (y == 1) {
-                initNumber(x - 1, y + 1);
-                initNumber(x, y + 1);
-            } else if (1 < y && y < width) {
-                initNumber(x - 1, y - 1);
-                initNumber(x, y - 1);
-                initNumber(x - 1, y + 1);
-                initNumber(x, y + 1);
-            } else {
-                initNumber(x - 1, y - 1);
-                initNumber(x, y - 1);
-            }
-        }
-    }
+                    } else if (1 < y && y < height) {
 
-    private void initNumber(int x, int y) {
-        Cell temp = checkNumber(x, y);
-        if (temp != null) {
-            if (temp instanceof Number) {
-                int value = ((Number) temp).getValue();
-                ((Number) temp).setValue(value + 1);
-            }
-        } else {
-            Number number = new Number(x, y);
-            number.setValue(1);
-            number.setStatus(Status.NUMBER);
-            cells.add(number);
-        }
-    }
+                    } else {
 
-    private Cell checkNumber(int x, int y) {
-        for (Cell cell : cells) {
-            if (cell.getX() == x && cell.getY() == y) {
-                return cell;
-            }
-        }
-        return null;
-    }
+                    }
+                } else if (1 < x && x < width) {
+                    if (y == 1) {
 
-    private void crateEmpties() {
-        for (int x = 1; x <= height; x++) {
-            for (int y = 1; y <= width; y++) {
-                boolean noExist = false;
-                for (Cell cell : cells) {
-                    if (cell.getX() == x && cell.getY() == y) {
-                        noExist = true;
+                    } else if (1 < y && y < height) {
+
+                    } else {
+
+                    }
+                } else {
+                    if (y == 1) {
+
+                    } else if (1 < y && y < height) {
+
+                    } else {
+
                     }
                 }
-                if (!noExist) {
-                    Cell empty = new Cell(x, y);
-                    empty.setStatus(Status.EMPTY);
-                    cells.add(empty);
+            }
+        }
+    }
+
+    private void setNumber(int x, int y){
+        //todo set number method
+    }
+
+    public void initialCell() {
+        Cell main = new Cell(X, Y);
+        main.setStatus(Status.EMPTY);
+        main.setMain(true);
+        cells.add(main);
+        Cell[] radiusCell = new Cell[8];
+        if (X == 1) {
+            radiusCell[0] = new Cell(X + 1, Y);
+            if (Y == 1) {
+                radiusCell[1] = new Cell(X + 1, Y + 1);
+                radiusCell[2] = new Cell(X, Y + 1);
+            } else {
+                radiusCell[1] = new Cell(X + 1, Y - 1);
+                radiusCell[2] = new Cell(X, Y - 1);
+                if (1 < Y && Y < height) {
+                    radiusCell[3] = new Cell(X + 1, Y + 1);
+                    radiusCell[4] = new Cell(X, Y + 1);
+                    radiusCell[5] = new Cell(X, Y - 1);
+                }
+            }
+        } else if (1 < X && X < width) {
+            radiusCell[0] = new Cell(X + 1, Y);
+            radiusCell[1] = new Cell(X - 1, Y);
+            if (Y == 1) {
+                radiusCell[2] = new Cell(X + 1, Y + 1);
+                radiusCell[3] = new Cell(X, Y + 1);//
+                radiusCell[4] = new Cell(X - 1, Y + 1);
+            } else {
+                radiusCell[2] = new Cell(X - 1, Y - 1);
+                radiusCell[3] = new Cell(X, Y - 1);
+                radiusCell[4] = new Cell(X + 1, Y - 1);
+                if (1 < Y && Y < height) {
+                    radiusCell[5] = new Cell(X + 1, Y + 1);
+                    radiusCell[6] = new Cell(X, Y + 1);
+                    radiusCell[7] = new Cell(X - 1, Y + 1);
+                }
+            }
+        } else {
+            radiusCell[0] = new Cell(X - 1, Y);
+            if (Y == 1) {
+                radiusCell[1] = new Cell(X, Y + 1);
+                radiusCell[2] = new Cell(X - 1, Y + 1);
+            } else {
+                radiusCell[1] = new Cell(X - 1, Y - 1);
+                radiusCell[2] = new Cell(X, Y - 1);
+                if (1 < Y && Y < height) {
+                    radiusCell[3] = new Cell(X, Y + 1);
+                    radiusCell[4] = new Cell(X - 1, Y + 1);
                 }
             }
         }
-    }
-
-    private List<Integer> xAxis(){
-        List<Integer> list = new ArrayList();
-        for (int x = 1; x <= width; x++) {
-            if (yAxis(x).size() > 0 && !list.contains(x)) list.add(x);
-        }
-        return list;
-    }
-
-    private List<Integer> yAxis(int x){
-        List<Integer> list = new ArrayList();
-        for (int i = 1; i <= width; i++) {
-            list.add(i);
-        }
-        List<Integer> removed = new ArrayList<>();
-        for(Cell cell: cells){
-            if (cell.getX() == x){
-                removed.add(cell.getY());
+        for (Cell cell : radiusCell) {
+            if (cell != null) {
+                cell.setStatus(Status.EMPTY);
+                cell.setMain(true);
+                cells.add(cell);
             }
         }
-        list.remove(removed);
-        return list;
+    }
+
+    public void removeInitialCell(){
+        cells.removeIf(Cell::isMain);
+    }
+
+    public void createMines(){
+        int mineCounter = 0;
+        while (mineCounter < totalMines){
+            int x = randomX();
+            int y = randomY(x);
+            Cell mine = new Cell(x, y);
+            mine.setStatus(Status.MINE);
+            cells.add(mine);
+            mineCounter++;
+        }
+    }
+
+    private int randomX(){
+        List<Integer> freeX = new ArrayList<>();
+        for (int x = 1; x <= width; x++) {
+            int counter = 0;
+            for(Cell cell: cells){
+                if (x == cell.getX())counter++;
+            }
+            if (counter < width)freeX.add(x);
+        }
+        return freeX.get(random.nextInt(freeX.size()));
+    }
+
+    private int randomY(int x){
+        List<Integer> freeY = new ArrayList<>();
+        for (int y = 1; y <= height; y++) {
+            freeY.add(y);
+        }
+        List<Integer> busyY = new ArrayList<>();
+        for (Cell cell: cells){
+            if (cell.getX() == x)busyY.add(cell.getY());
+        }
+        freeY.removeAll(busyY);
+        return freeY.get(random.nextInt(freeY.size()));
     }
 
     public Set<Cell> getCells() {
         return cells;
-    }
-
-    public static Model getModel(int n, int inputX, int inputY) {
-        if (model == null) {
-            model = new Model(n, inputX, inputY);
-        }
-        return model;
     }
 }

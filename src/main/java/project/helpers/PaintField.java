@@ -24,7 +24,6 @@ public class PaintField implements Runnable {
 
     @Override
     public void run() {
-        int counter = 0;
         Random random = new Random();
         while (xRange().size() > 0){
             List<Integer> xs = xRange();
@@ -38,9 +37,7 @@ public class PaintField implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            counter++;
         }
-        System.out.println(counter);
     }
 
     private List<Integer> yRange(int currentX) {

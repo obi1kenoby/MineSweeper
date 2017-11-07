@@ -2,7 +2,6 @@ package project;
 
 import java.awt.EventQueue;
 import project.controller.GameController;
-
 import javax.swing.*;
 
 /**
@@ -18,8 +17,6 @@ public class Launcher {
         catch (Exception e) {
             e.printStackTrace();
         }
-        EventQueue.invokeLater(() ->{
-            new GameController(9).play();
-        });
+        EventQueue.invokeLater(() -> new GameController(9).play());
     }
 }

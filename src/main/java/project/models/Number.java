@@ -11,6 +11,7 @@ public class Number extends Cell{
 
     public Number(int x, int y) {
         super(x, y);
+        setStatus(Status.NUMBER);
     }
 
     public Number() {}
@@ -27,6 +28,4 @@ public class Number extends Cell{
     public String toString() {
         return super.toString() + " - " + value; 
     }
-
-    
 }

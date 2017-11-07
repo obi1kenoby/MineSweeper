@@ -14,14 +14,15 @@ public class Cell {
     private int y;
     private Status status;
     private ImageIcon icon;
+    private boolean main;
 
     public Cell(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
+
     public Cell(){}
-    
+
     public int getX() {
         return x;
     }
@@ -36,6 +37,14 @@ public class Cell {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain(boolean main) {
+        this.main = main;
     }
 
     public Status getStatus() {

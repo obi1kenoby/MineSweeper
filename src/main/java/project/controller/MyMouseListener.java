@@ -53,7 +53,7 @@ public class MyMouseListener implements MouseListener {
     public void mousePressed(MouseEvent e) {
         int modifiers = e.getModifiers();
         if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-            Model model = Model.getModel(n, x+1, y+1);
+            Model model = new Model(n, x+1, x+1);
             cells = model.getCells();
             openButton(x, y);
         }
@@ -195,7 +195,5 @@ public class MyMouseListener implements MouseListener {
         }
     }
 
-    private void gameOver() {
-        System.out.println("GAME OVER!");
-    }
+    private void gameOver(){}
 }
