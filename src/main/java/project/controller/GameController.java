@@ -15,21 +15,25 @@ import javax.swing.*;
 public class GameController {
 
     private final GameFrame view;
+    private int n;
 
     public GameController(int n) {
-        view = new GameFrame(n);
+        this.n = n;
+        view = GameFrame.getFrame(n);
         new Thread(new Time(view.getTimeLabel())).start();
     }
 
     public void play(){
         new Thread(new PaintField(view.getHeightField(), view.getWidthField(), view.getButtons())).start();
         JButton[][] buttons = view.getButtons();
-        for (int x = 0; x < view.getHeightField(); x++) {
-            for (int y = 0; y < view.getWidthField(); y++) {
-
+        for (int x = 0; x < view.getWidthField(); x++) {
+            for (int y = 0; y < view.getHeightField(); y++) {
+                buttons[y][x].addMouseListener(new MyMouseListener(x, y, n, view.getHeightField(), view.getWidthField(), buttons, view));
             }
         }
 
         view.getClose().addActionListener(e -> System.exit(0));
+
+        //view.getNewGame().addActionListener();
     }
 }

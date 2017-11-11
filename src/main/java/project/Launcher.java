@@ -1,7 +1,14 @@
 package project;
 
-import java.awt.EventQueue;
+import java.awt.*;
+import java.util.Random;
+
 import project.controller.GameController;
+import project.models.Cell;
+import project.models.Model;
+import project.models.Number;
+import project.view.GameFrame;
+
 import javax.swing.*;
 
 /**
@@ -10,13 +17,7 @@ import javax.swing.*;
  */
 
 public class Launcher {
-    public static void main(String[] args){
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
         EventQueue.invokeLater(() -> new GameController(9).play());
     }
 }

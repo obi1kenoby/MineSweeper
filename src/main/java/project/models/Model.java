@@ -1,14 +1,17 @@
 package project.models;
 
+import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Alexander Naumov on 20.10.2017.
  * @version 1.0.0
  */
 
-public final class Model {
+public final class Model implements Serializable{
 
+    private static final long serialVersionUID = 2491939809417725173L;
     private int height;
     private int width;
     private int X;
@@ -16,8 +19,10 @@ public final class Model {
     private int totalMines;
     private Set<Cell> cells = new HashSet<>();
     private final Random random;
+    private static Model model;
 
-    public Model(int n, int inputX, int inputY) {
+
+    private Model(int n, int inputX, int inputY) {
         this.X = inputX;
         this.Y = inputY;
         switch (n) {
@@ -38,45 +43,120 @@ public final class Model {
                 break;
         }
         random = new Random();
+        initialCell();
+        createMines();
+        removeInitialCell();
+        createNumbers();
+        crateEmpties();
+        System.out.println("model was created." + " x" + inputX + " y" + inputY);
     }
 
     public void createNumbers(){
-        for(Cell cell: cells) {
-            if (cell.getStatus() == Status.MINE) {
-                int x = cell.getX();
-                int y = cell.getY();
-
-                if (x == 1) {
-                    if (y == 1) {
-
-                    } else if (1 < y && y < height) {
-
-                    } else {
-
-                    }
-                } else if (1 < x && x < width) {
-                    if (y == 1) {
-
-                    } else if (1 < y && y < height) {
-
-                    } else {
-
-                    }
-                } else {
-                    if (y == 1) {
-
-                    } else if (1 < y && y < height) {
-
-                    } else {
-
-                    }
-                }
+        Set<Cell> temp  = cells.stream().filter(cell -> !cell.getStatus().equals(Status.NUMBER)).collect(Collectors.toSet());
+        for(Cell cell: temp){
+            if (cells.contains(cell) && cell.getStatus().equals(Status.MINE)){
+                addNumbers(cell.getX(), cell.getY());
             }
         }
     }
 
-    private void setNumber(int x, int y){
-        //todo set number method
+    private void addNumbers(int x, int y){
+        if (x == 1) {
+            initNumber(x +1, y);
+            if (y == 1) {
+                initNumber(x, y +1);
+                initNumber(x + 1, y + 1);
+            }
+            else if (1 < y && y < height){
+                initNumber(x, y - 1);
+                initNumber(x + 1, y - 1);
+                initNumber(x, y + 1);
+                initNumber(x + 1, y + 1);
+            }
+            else{
+                initNumber(x, y - 1);
+                initNumber(x + 1, y - 1);
+            }
+        }else if (1 < x && x < width){
+            initNumber(x + 1, y);
+            initNumber(x - 1, y);
+            if (y == 1) {
+                initNumber(x - 1, y +1);
+                initNumber(x, y + 1);
+                initNumber(x + 1, y + 1);
+            }
+            else if (1 < y && y < height) {
+                initNumber(x - 1, y - 1);
+                initNumber(x, y - 1);
+                initNumber(x + 1, y - 1);
+                initNumber(x - 1, y + 1);
+                initNumber(x, y + 1);
+                initNumber(x + 1, y + 1);
+            }
+            else{
+                initNumber(x - 1, y - 1);
+                initNumber(x, y - 1);
+                initNumber(x + 1, y - 1);
+            }
+        }else{
+            initNumber(x - 1, y);
+            if (y == 1) {
+                initNumber(x - 1, y + 1);
+                initNumber(x, y + 1);
+            }
+            else if (1 < y && y < height) {
+                initNumber(x - 1, y - 1);
+                initNumber(x, y - 1);
+                initNumber(x - 1, y + 1);
+                initNumber(x, y + 1);
+            }
+            else{
+                initNumber(x - 1, y - 1);
+                initNumber(x, y - 1);
+            }
+        }
+    }
+
+    private void initNumber(int x, int y){
+        Cell temp = checkNumber(x, y);
+        if (temp != null) {
+            if (temp instanceof Number) {
+                int value = ((Number)temp).getValue();
+                ((Number)temp).setValue(value + 1);
+            }
+        }else{
+            Number number = new Number(x, y);
+            number.setValue(1);
+            number.setStatus(Status.NUMBER);
+            cells.add(number);
+        }
+    }
+
+    private Cell checkNumber(int x, int y){
+        for(Cell cell: cells){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    public void crateEmpties(){
+        for (int x = 1; x <= width; x++) {
+            for (int y = 1; y <= height; y++) {
+                boolean noExist = false;
+                for(Cell cell: cells){
+                    if (cell.getX() == x && cell.getY() == y) {
+                        noExist = true;
+                    }
+                }
+                if (!noExist) {
+                    Cell empty = new Cell(x,y);
+                    empty.setStatus(Status.EMPTY);
+                    cells.add(empty);
+                }
+            }
+        }
     }
 
     public void initialCell() {
@@ -139,13 +219,13 @@ public final class Model {
         }
     }
 
-    public void removeInitialCell(){
+    public void removeInitialCell() {
         cells.removeIf(Cell::isMain);
     }
 
-    public void createMines(){
+    public void createMines() {
         int mineCounter = 0;
-        while (mineCounter < totalMines){
+        while (mineCounter < totalMines) {
             int x = randomX();
             int y = randomY(x);
             Cell mine = new Cell(x, y);
@@ -155,26 +235,26 @@ public final class Model {
         }
     }
 
-    private int randomX(){
+    private int randomX() {
         List<Integer> freeX = new ArrayList<>();
         for (int x = 1; x <= width; x++) {
             int counter = 0;
-            for(Cell cell: cells){
-                if (x == cell.getX())counter++;
+            for (Cell cell : cells) {
+                if (x == cell.getX()) counter++;
             }
-            if (counter < width)freeX.add(x);
+            if (counter < width) freeX.add(x);
         }
         return freeX.get(random.nextInt(freeX.size()));
     }
 
-    private int randomY(int x){
+    private int randomY(int x) {
         List<Integer> freeY = new ArrayList<>();
         for (int y = 1; y <= height; y++) {
             freeY.add(y);
         }
         List<Integer> busyY = new ArrayList<>();
-        for (Cell cell: cells){
-            if (cell.getX() == x)busyY.add(cell.getY());
+        for (Cell cell : cells) {
+            if (cell.getX() == x) busyY.add(cell.getY());
         }
         freeY.removeAll(busyY);
         return freeY.get(random.nextInt(freeY.size()));
@@ -182,5 +262,12 @@ public final class Model {
 
     public Set<Cell> getCells() {
         return cells;
+    }
+
+    public static Model getModel(int n, int inputX, int inputY){
+        if (model == null){
+            model = new Model(n, inputX, inputY);
+        }
+        return model;
     }
 }

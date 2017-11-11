@@ -10,15 +10,18 @@ import javax.swing.*;
 
 public final class GameFrame extends JFrame {
 
+    private static GameFrame frame;
     private JLabel timeLabel;
     private JButton[][] buttons;
+    private JPanel buttonPanel;
     private JMenuItem close;
+    private JMenuItem newGame;
     private final int heightField;
     private final int widthField;
     private final int n;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
 
-    public GameFrame(int n) {
+    private GameFrame(int n) {
         this.n = n;
         if (n == 9){
             widthField = n;
@@ -41,7 +44,7 @@ public final class GameFrame extends JFrame {
         GridLayout layout = new GridLayout(heightField, widthField);
         layout.setVgap(1);
         layout.setHgap(1);
-        JPanel buttonPanel = new JPanel(layout);
+        buttonPanel = new JPanel(layout);
         buttonPanel.setBackground(Color.black);
         Dimension field;
         if (widthField == 16) {
@@ -68,7 +71,7 @@ public final class GameFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         JMenu game = new JMenu("Game");
-        JMenuItem newGame = new JMenuItem("Новая игра");
+        newGame = new JMenuItem("Новая игра");
         JMenuItem settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
@@ -104,12 +107,20 @@ public final class GameFrame extends JFrame {
         return close;
     }
 
+    public JMenuItem getNewGame() {
+        return newGame;
+    }
+
     public int getN() {
         return n;
     }
 
     public JButton[][] getButtons() {
         return buttons;
+    }
+
+    public JPanel getButtonPanel() {
+        return buttonPanel;
     }
 
     public JLabel getTimeLabel() {
@@ -122,5 +133,12 @@ public final class GameFrame extends JFrame {
 
     public int getWidthField() {
         return widthField;
+    }
+
+    public static GameFrame getFrame(int n){
+        if (frame == null){
+            frame = new GameFrame(n);
+        }
+        return frame;
     }
 }

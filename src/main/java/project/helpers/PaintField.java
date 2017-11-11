@@ -1,7 +1,6 @@
 package project.helpers;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -31,12 +30,6 @@ public class PaintField implements Runnable {
             List<Integer> ys = yRange(x);
             int y = ys.get(random.nextInt(ys.size()));
             buttons[x][y].setIcon(image);
-
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
