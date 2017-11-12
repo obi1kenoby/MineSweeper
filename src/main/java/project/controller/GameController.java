@@ -2,7 +2,6 @@ package project.controller;
 
 import project.helpers.PaintField;
 import project.helpers.Time;
-import project.models.Model;
 import project.view.GameFrame;
 
 import javax.swing.*;
@@ -14,17 +13,20 @@ import javax.swing.*;
 
 public class GameController {
 
+    private boolean begin;
     private final GameFrame view;
     private int n;
 
     public GameController(int n) {
         this.n = n;
         view = GameFrame.getFrame(n);
-        new Thread(new Time(view.getTimeLabel())).start();
     }
 
-    public void play(){
+    public void play() {
         new Thread(new PaintField(view.getHeightField(), view.getWidthField(), view.getButtons())).start();
+        if (begin){
+            new Thread(new Time(view.getTimeLabel())).start();
+        }
         JButton[][] buttons = view.getButtons();
         for (int x = 0; x < view.getWidthField(); x++) {
             for (int y = 0; y < view.getHeightField(); y++) {

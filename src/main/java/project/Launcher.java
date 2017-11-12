@@ -18,6 +18,6 @@ import javax.swing.*;
 
 public class Launcher {
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> new GameController(9).play());
+        EventQueue.invokeLater(() -> new GameController(30).play());
     }
 }

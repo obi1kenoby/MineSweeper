@@ -8,7 +8,7 @@ import java.util.*;
  * @version 1.0.0
  */
 
-public class PaintField implements Runnable {
+public class PaintField implements Runnable{
 
     private final int height;
     private final int width;

@@ -4,6 +4,7 @@ package project.helpers;
 import project.models.Cell;
 import project.models.Model;
 import project.models.Status;
+
 import javax.swing.*;
 
 
@@ -20,15 +21,15 @@ public class GameOver implements Runnable {
 
     @Override
     public void run() {
-        for(Cell cell: model.getCells()){
-            if (cell.getStatus().equals(Status.MINE)){
-                buttons[cell.getY() - 1][cell.getX() - 1].setIcon(mine);
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        try {
+            for (Cell cell : model.getCells()) {
+                if (cell.getStatus().equals(Status.MINE)) {
+                    Thread.sleep(100);
+                    buttons[cell.getY() - 1][cell.getX() - 1].setIcon(mine);
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

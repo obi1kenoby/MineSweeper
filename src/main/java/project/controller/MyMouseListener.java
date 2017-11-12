@@ -188,6 +188,11 @@ public class MyMouseListener implements MouseListener {
                         buttons[y][x].setDisabledIcon(mine);
                         frame.setEnabled(false);
                         new Thread(new GameOver(model, buttons)).start();
+                        int n = JOptionPane.showConfirmDialog(
+                                frame,
+                                "Хотите играть ещё?",
+                                "Игра проиграна",
+                                JOptionPane.YES_NO_OPTION);
                 }
             }
         }

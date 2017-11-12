@@ -2,6 +2,7 @@ package project.view;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
  * @author Alexander Naumov on 26.10.2017
