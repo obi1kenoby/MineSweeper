@@ -1,15 +1,18 @@
 package project.controller;
 
+import project.level.Level;
 import project.helpers.GameOver;
 import project.models.Cell;
 import project.models.Model;
 import project.models.Number;
+
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 import javax.swing.*;
+
 import project.models.Status;
-import project.view.GameFrame;
 
 /**
  * @author Alexander Naumov on 28.10.2017
@@ -23,8 +26,8 @@ public class MyMouseListener implements MouseListener {
     private int width;
     private int height;
     private Model model;
-    private GameFrame frame;
-    private final int n;
+    private final Level level;
+    private List<MyMouseListener> listenersList;
     private final JButton[][] buttons;
     private final ImageIcon accentuated = new ImageIcon("images/accentuated.png");
     private final ImageIcon def = new ImageIcon("images/default.png");
@@ -40,29 +43,31 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images/7.png");
     private final ImageIcon eight = new ImageIcon("images/8.png");
 
-    public MyMouseListener(int x, int y, int n, int width, int height, JButton[][] buttons, GameFrame frame) {
+    public MyMouseListener(List<MyMouseListener> listenersList, int x, int y, Level level, int width, int height, JButton[][] buttons) {
+        this.listenersList = listenersList;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.n = n;
+        this.level = level;
         this.buttons = buttons;
-        this.frame = frame;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         int modifiers = e.getModifiers();
         if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-            model = Model.getModel(n, x+1, y+1);
+            if (model == null){
+                model = new Model(level, x + 1, y + 1);
+                listenersList.forEach(listener -> listener.setModel(model));
+            }
             openButton(x, y);
         }
         if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
-            if (!buttons[y][x].isEnabled() && buttons[y][x].getDisabledIcon().equals(flag)){
+            if (!buttons[y][x].isEnabled() && buttons[y][x].getDisabledIcon().equals(flag)) {
                 buttons[y][x].setEnabled(true);
                 buttons[y][x].setDisabledIcon(def);
-            }
-            else if (buttons[y][x].isEnabled()){
+            } else if (buttons[y][x].isEnabled()) {
                 buttons[y][x].setEnabled(false);
                 buttons[y][x].setDisabledIcon(flag);
             }
@@ -120,7 +125,7 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void openButton(int x, int y) {
-        if (!buttons[y][x].isEnabled()){
+        if (!buttons[y][x].isEnabled()) {
             return;
         }
         for (Cell cell : model.getCells()) {
@@ -186,15 +191,14 @@ public class MyMouseListener implements MouseListener {
                     case MINE:
                         buttons[y][x].setEnabled(false);
                         buttons[y][x].setDisabledIcon(mine);
-                        frame.setEnabled(false);
+//                        frame.setEnabled(false);
                         new Thread(new GameOver(model, buttons)).start();
-                        int n = JOptionPane.showConfirmDialog(
-                                frame,
-                                "Хотите играть ещё?",
-                                "Игра проиграна",
-                                JOptionPane.YES_NO_OPTION);
                 }
             }
         }
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

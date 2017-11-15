@@ -1,5 +1,7 @@
 package project.models;
 
+import project.level.Level;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,7 +11,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  */
 
-public final class Model implements Serializable{
+public class Model implements Serializable{
 
     private static final long serialVersionUID = 2491939809417725173L;
     private int height;
@@ -19,24 +21,23 @@ public final class Model implements Serializable{
     private int totalMines;
     private Set<Cell> cells = new HashSet<>();
     private final Random random;
-    private static Model model;
 
 
-    private Model(int n, int inputX, int inputY) {
+    public Model(Level level, int inputX, int inputY) {
         this.X = inputX;
         this.Y = inputY;
-        switch (n) {
-            case 9:
+        switch (level) {
+            case EASY:
                 totalMines = 10;
-                width = n;
-                height = n;
+                width = 9;
+                height = 9;
                 break;
-            case 16:
+            case MEDIUM:
                 totalMines = 40;
-                width = n;
-                height = n;
+                width = 16;
+                height = 16;
                 break;
-            default:
+            case HARD:
                 totalMines = 99;
                 width = 30;
                 height = 16;
@@ -48,7 +49,6 @@ public final class Model implements Serializable{
         removeInitialCell();
         createNumbers();
         crateEmpties();
-        System.out.println("model was created." + " x" + inputX + " y" + inputY);
     }
 
     public void createNumbers(){
@@ -262,12 +262,5 @@ public final class Model implements Serializable{
 
     public Set<Cell> getCells() {
         return cells;
-    }
-
-    public static Model getModel(int n, int inputX, int inputY){
-        if (model == null){
-            model = new Model(n, inputX, inputY);
-        }
-        return model;
     }
 }

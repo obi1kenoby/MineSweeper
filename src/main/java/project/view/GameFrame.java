@@ -1,8 +1,11 @@
 package project.view;
 
+import project.controller.GameController;
+import project.level.Level;
+
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 /**
  * @author Alexander Naumov on 26.10.2017
@@ -11,52 +14,49 @@ import javax.swing.border.EmptyBorder;
 
 public final class GameFrame extends JFrame {
 
+    private GameController mainController;
     private static GameFrame frame;
     private JLabel timeLabel;
     private JButton[][] buttons;
     private JPanel buttonPanel;
+    private JPanel rootPanel;
+    private JPanel southPanel;
     private JMenuItem close;
     private JMenuItem newGame;
-    private final int heightField;
-    private final int widthField;
-    private final int n;
+    private JMenuItem statistic;
+    private int heightField;
+    private int widthField;
+    private final Level level;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
 
-    private GameFrame(int n) {
-        this.n = n;
-        if (n == 9){
-            widthField = n;
-            heightField = n;
-        }else if (n == 16){
-            widthField = n;
-            heightField = n;
-        }
-        else {
-            widthField = 30;
-            heightField = 16;
+    public GameFrame(Level level) {
+        this.level = level;
+        switch (level) {
+            case EASY:
+                widthField = 9;
+                heightField = 9;
+                break;
+            case MEDIUM:
+                widthField = 16;
+                heightField = 16;
+                break;
+            case HARD:
+                widthField = 30;
+                heightField = 16;
+                break;
         }
         init();
+        mainController = new GameController(timeLabel, rootPanel, buttonPanel, buttons);
     }
 
     private void init() {
         timeLabel = new JLabel();
-        JPanel rootPanel = new JPanel(new BorderLayout(20, 20));
-        JPanel southPanel = new JPanel(new GridLayout(1, 2));
+        rootPanel = new JPanel(new BorderLayout(20, 20));
+        southPanel = new JPanel(new GridLayout(1, 2));
         GridLayout layout = new GridLayout(heightField, widthField);
-        layout.setVgap(1);
-        layout.setHgap(1);
         buttonPanel = new JPanel(layout);
         buttonPanel.setBackground(Color.black);
-        Dimension field;
-        if (widthField == 16) {
-            field = new Dimension(420,420);
-        } else if (widthField == 9){
-            field = new Dimension(200, 200);
-        }else {
-            field = new Dimension(788, 420);
-        }
-
-        buttonPanel.setPreferredSize(field);
+                buttonPanel.setPreferredSize(new Dimension(200, 200));
         timeLabel.setPreferredSize(new Dimension(200, 20));
 
 
@@ -71,14 +71,15 @@ public final class GameFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-        JMenu game = new JMenu("Game");
+        JMenu game = new JMenu("Игра");
         newGame = new JMenuItem("Новая игра");
         JMenuItem settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
-        JMenu about = new JMenu("About");
+        JMenu about = new JMenu("Справка");
+        statistic = new JMenuItem("Статистика");
         game.add(newGame);
-        game.add(new JPopupMenu.Separator());
+        game.add(statistic);
         game.add(settings);
         game.add(new JPopupMenu.Separator());
         game.add(close);
@@ -102,6 +103,19 @@ public final class GameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        newGame.addActionListener(e -> {
+            mainController.setLevel(Level.MEDIUM);
+            repaint();
+            pack();
+            setLocationRelativeTo(null);
+            mainController.newGame(Level.MEDIUM);
+        });
+
+        KeyStroke f2 = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
+        newGame.setAccelerator(f2);
+
+        close.addActionListener(e -> System.exit(0));
     }
 
     public JMenuItem getClose() {
@@ -112,8 +126,8 @@ public final class GameFrame extends JFrame {
         return newGame;
     }
 
-    public int getN() {
-        return n;
+    public Level getLevel() {
+        return level;
     }
 
     public JButton[][] getButtons() {
@@ -136,9 +150,9 @@ public final class GameFrame extends JFrame {
         return widthField;
     }
 
-    public static GameFrame getFrame(int n){
-        if (frame == null){
-            frame = new GameFrame(n);
+    public static GameFrame getFrame(Level level) {
+        if (frame == null) {
+            frame = new GameFrame(level);
         }
         return frame;
     }

@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import project.level.Level;
 import project.models.Cell;
 import project.models.Model;
 import project.models.Status;
@@ -18,26 +19,26 @@ import static org.junit.Assert.fail;
 @RunWith(value = Parameterized.class)
 public class ModelTest {
 
-    private int level;
+    private Level level;
     private int size;
     private int mines;
     private int width;
     private int height;
 
-    public ModelTest(int level, int size, int mines) {
+    public ModelTest(Level level, int size, int mines) {
         this.level = level;
         this.size = size;
         this.mines = mines;
         switch (level) {
-            case 9:
+            case EASY:
                 width = 9;
                 height = 9;
                 break;
-            case 16:
+            case MEDIUM:
                 width = 16;
                 height = 16;
                 break;
-            default:
+            case HARD:
                 width = 30;
                 height = 16;
                 break;
@@ -46,7 +47,7 @@ public class ModelTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        Object[][] data = new Object[][]{{9, 81, 10}, {16, 256, 40}, {30, 480, 99}};
+        Object[][] data = new Object[][]{{Level.EASY, 81, 10}, {Level.MEDIUM, 256, 40}, {Level.HARD, 480, 99}};
         return Arrays.asList(data);
     }
 
@@ -56,7 +57,7 @@ public class ModelTest {
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
         int initCells;
-        Model model = Model.getModel(level, x, y);
+        Model model = new Model(level, x, y);
         model.initialCell();
         if (x == 1) {
             if (y == 1) {
@@ -92,7 +93,7 @@ public class ModelTest {
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
         int minesCounter = 0;
-        Model model = Model.getModel(level, x, y);
+        Model model = new Model(level, x, y);
         model.initialCell();
         model.createMines();
         for (Cell cell : model.getCells()) {
@@ -106,7 +107,7 @@ public class ModelTest {
         Random random = new Random();
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
-        Model model = Model.getModel(level, x, y);
+        Model model = new Model(level, x, y);
         model.initialCell();
         model.createMines();
         List<Cell> initCells = model.getCells().stream().
@@ -128,7 +129,7 @@ public class ModelTest {
         Random random = new Random();
         int X = random.nextInt(width) + 1;
         int Y = random.nextInt(height) + 1;
-        Model model = Model.getModel(level, X, Y);
+        Model model = new Model(level, X, Y);
         model.initialCell();
         model.createMines();
         model.removeInitialCell();

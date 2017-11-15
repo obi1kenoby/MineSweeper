@@ -1,15 +1,10 @@
 package project;
 
-import java.awt.*;
-import java.util.Random;
-
-import project.controller.GameController;
-import project.models.Cell;
-import project.models.Model;
-import project.models.Number;
+import project.level.Level;
 import project.view.GameFrame;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Alexander Naumov on 24.10.2017
@@ -17,7 +12,8 @@ import javax.swing.*;
  */
 
 public class Launcher {
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> new GameController(30).play());
+    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        EventQueue.invokeLater(() -> new GameFrame(Level.EASY));
     }
 }
