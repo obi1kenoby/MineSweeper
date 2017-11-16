@@ -15,6 +15,7 @@ import javax.swing.*;
 public final class GameFrame extends JFrame {
 
     private GameController mainController;
+    private SettingsFrame settingsFrame;
     private static GameFrame frame;
     private JLabel timeLabel;
     private JButton[][] buttons;
@@ -24,12 +25,13 @@ public final class GameFrame extends JFrame {
     private JMenuItem close;
     private JMenuItem newGame;
     private JMenuItem statistic;
+    private JMenuItem settings;
     private int heightField;
     private int widthField;
-    private final Level level;
+    private Level level;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
 
-    public GameFrame(Level level) {
+    private GameFrame(Level level) {
         this.level = level;
         switch (level) {
             case EASY:
@@ -46,17 +48,23 @@ public final class GameFrame extends JFrame {
                 break;
         }
         init();
-        mainController = new GameController(timeLabel, rootPanel, buttonPanel, buttons);
+        mainController = new GameController(timeLabel, rootPanel, buttonPanel, buttons, level);
+        settingsFrame = SettingsFrame.getSettingFrame();
+        settingsFrame.setGameController(mainController);
+    }
+
+    private GameFrame() {
     }
 
     private void init() {
         timeLabel = new JLabel();
         rootPanel = new JPanel(new BorderLayout(20, 20));
         southPanel = new JPanel(new GridLayout(1, 2));
-        GridLayout layout = new GridLayout(heightField, widthField);
+        GridLayout layout = new GridLayout(heightField, widthField,1,1);
         buttonPanel = new JPanel(layout);
         buttonPanel.setBackground(Color.black);
-                buttonPanel.setPreferredSize(new Dimension(200, 200));
+
+        buttonPanel.setPreferredSize(new Dimension(200, 200));
         timeLabel.setPreferredSize(new Dimension(200, 20));
 
 
@@ -73,7 +81,7 @@ public final class GameFrame extends JFrame {
         setJMenuBar(menuBar);
         JMenu game = new JMenu("Игра");
         newGame = new JMenuItem("Новая игра");
-        JMenuItem settings = new JMenuItem("Параметры");
+        settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
         JMenu about = new JMenu("Справка");
@@ -105,17 +113,26 @@ public final class GameFrame extends JFrame {
         setVisible(true);
 
         newGame.addActionListener(e -> {
-            mainController.setLevel(Level.MEDIUM);
+            mainController.newGame();
             repaint();
-            pack();
-            setLocationRelativeTo(null);
-            mainController.newGame(Level.MEDIUM);
         });
-
         KeyStroke f2 = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
         newGame.setAccelerator(f2);
 
+
+        settings.addActionListener(e -> settingsFrame.visibleControl());
+        KeyStroke f5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
+        settings.setAccelerator(f5);
+
+        KeyStroke f4 = KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0);
+        statistic.setAccelerator(f4);
+
+
         close.addActionListener(e -> System.exit(0));
+    }
+
+    public JPanel getRootPanel() {
+        return rootPanel;
     }
 
     public JMenuItem getClose() {
@@ -153,6 +170,13 @@ public final class GameFrame extends JFrame {
     public static GameFrame getFrame(Level level) {
         if (frame == null) {
             frame = new GameFrame(level);
+        }
+        return frame;
+    }
+
+    public static GameFrame getFrame() {
+        if (frame == null) {
+            frame = new GameFrame(Level.EASY);
         }
         return frame;
     }

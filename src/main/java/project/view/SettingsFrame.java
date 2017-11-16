@@ -1,6 +1,9 @@
 package project.view;
 
 
+import project.controller.GameController;
+import project.level.Level;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -8,15 +11,18 @@ import java.awt.*;
 
 public class SettingsFrame extends JDialog {
 
+    private GameController gameController;
     private JTextField height;
     private JTextField width;
     private JTextField mines;
     private JLabel heightLabel;
     private JLabel widthLabel;
     private JLabel minesLabel;
+    private Level level;
     private JRadioButton specButton;
+    private static SettingsFrame settingsFrame;
 
-    public SettingsFrame() {
+    private SettingsFrame() {
         super();
 
         JPanel root = new JPanel(new BorderLayout());
@@ -61,6 +67,9 @@ public class SettingsFrame extends JDialog {
         mediumButton.setFocusPainted(false);
         JRadioButton hardButton = new JRadioButton("<html>Профессилнал<br>99 мин<br>поле 30 х 16</html>", false);
         hardButton.setFocusPainted(false);
+        easyButton.addActionListener(e -> level = Level.EASY);
+        mediumButton.addActionListener(e -> level = Level.MEDIUM);
+        hardButton.addActionListener(e -> level = Level.HARD);
         specButton = new JRadioButton("Особый", false);
         specButton.setFocusPainted(false);
 
@@ -89,6 +98,16 @@ public class SettingsFrame extends JDialog {
         JButton close = new JButton("Отмена");
         close.setFocusPainted(false);
         ok.setFocusPainted(false);
+
+        ok.addActionListener(e -> {
+            gameController.setLevel(level);
+            gameController.newGame();
+            GameFrame gameFrame = GameFrame.getFrame();
+            gameFrame.repaint();
+            gameFrame.pack();
+            visibleControl();
+        });
+        close.addActionListener(e -> visibleControl());
 
         easy.add(easyButton, "Center");
         medium.add(mediumButton, "Center");
@@ -122,7 +141,6 @@ public class SettingsFrame extends JDialog {
         setTitle("Параметры");
         setResizable(false);
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void hideSpecialMode() {
@@ -134,13 +152,24 @@ public class SettingsFrame extends JDialog {
         minesLabel.setEnabled(false);
     }
 
-    public void visobleControll(){
+    public void visibleControl(){
         if (isVisible()){
             setVisible(false);
         }
         else {
             setVisible(true);
         }
+    }
+
+    public static SettingsFrame getSettingFrame(){
+        if (settingsFrame == null){
+            settingsFrame = new SettingsFrame();
+        }
+        return settingsFrame;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {

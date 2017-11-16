@@ -30,7 +30,7 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
-        new Thread(new PaintField(height, width, buttons)).start();
+        new Thread(new PaintField(width, height, buttons)).start();
         //new Thread(new Time(timeLabel)).start();
         List<MyMouseListener> listenersList = new ArrayList<>();
         for (int x = 0; x < width; x++) {

@@ -14,6 +14,6 @@ import java.awt.*;
 public class Launcher {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        EventQueue.invokeLater(() -> new GameFrame(Level.EASY));
+        EventQueue.invokeLater(() -> GameFrame.getFrame(Level.EASY));
     }
 }

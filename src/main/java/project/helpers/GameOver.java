@@ -4,6 +4,8 @@ package project.helpers;
 import project.models.Cell;
 import project.models.Model;
 import project.models.Status;
+import project.view.GameFrame;
+import project.view.GameOverFrame;
 
 import javax.swing.*;
 
@@ -21,6 +23,8 @@ public class GameOver implements Runnable {
 
     @Override
     public void run() {
+        GameFrame gameFrame = GameFrame.getFrame();
+        gameFrame.setEnabled(false);
         try {
             for (Cell cell : model.getCells()) {
                 if (cell.getStatus().equals(Status.MINE)) {
@@ -31,5 +35,7 @@ public class GameOver implements Runnable {
         }catch (Exception e){
             e.printStackTrace();
         }
+        GameOverFrame gameOverFrame = GameOverFrame.getGameOverFrame();
+        gameOverFrame.visibleControl();
     }
 }

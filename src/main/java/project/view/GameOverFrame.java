@@ -14,8 +14,9 @@ public class GameOverFrame extends JDialog {
     private JLabel wins;
     private JLabel bestDate;
     private JLabel winStatistic;
+    private static GameOverFrame gameOverFrame;
 
-    public GameOverFrame() {
+    private GameOverFrame() {
         super();
         GridLayout gridLayout = new GridLayout(1, 3);
         gridLayout.setHgap(10);
@@ -32,6 +33,8 @@ public class GameOverFrame extends JDialog {
         exit.setFocusPainted(false);
         restart.setFocusPainted(false);
         newGame.setFocusPainted(false);
+
+        exit.addActionListener(e -> System.exit(0));
 
         buttonPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         rootPanel.add(buttonPanel, "South");
@@ -92,16 +95,23 @@ public class GameOverFrame extends JDialog {
         setSize(420, 180);
         setTitle("Игра окончена");
         setLocationRelativeTo(null);
-        setVisible(true);
+        setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
     }
 
-    public void visobleControll(){
+    public void visibleControl(){
         if (isVisible()){
             setVisible(false);
         }
         else{
             setVisible(true);
         }
+    }
+
+    public static GameOverFrame getGameOverFrame(){
+        if (gameOverFrame == null){
+            gameOverFrame = new GameOverFrame();
+        }
+        return gameOverFrame;
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {

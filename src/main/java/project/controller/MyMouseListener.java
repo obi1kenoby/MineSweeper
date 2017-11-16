@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.*;
 
 import project.models.Status;
+import project.view.GameFrame;
 
 /**
  * @author Alexander Naumov on 28.10.2017
@@ -191,7 +192,6 @@ public class MyMouseListener implements MouseListener {
                     case MINE:
                         buttons[y][x].setEnabled(false);
                         buttons[y][x].setDisabledIcon(mine);
-//                        frame.setEnabled(false);
                         new Thread(new GameOver(model, buttons)).start();
                 }
             }
