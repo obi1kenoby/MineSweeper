@@ -6,6 +6,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * @author Alexander Naumov on 26.10.2017
+ * @version 1.0.0
+ */
+
 public class GameOverFrame extends JDialog {
 
     private JLabel time;

@@ -9,6 +9,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
+/**
+ * @author Alexander Naumov on 26.10.2017
+ * @version 1.0.0
+ */
+
 public class SettingsFrame extends JDialog {
 
     private GameController gameController;
@@ -19,7 +24,6 @@ public class SettingsFrame extends JDialog {
     private JLabel widthLabel;
     private JLabel minesLabel;
     private Level level;
-    private JRadioButton specButton;
     private static SettingsFrame settingsFrame;
 
     private SettingsFrame() {
@@ -67,11 +71,12 @@ public class SettingsFrame extends JDialog {
         mediumButton.setFocusPainted(false);
         JRadioButton hardButton = new JRadioButton("<html>Профессилнал<br>99 мин<br>поле 30 х 16</html>", false);
         hardButton.setFocusPainted(false);
+        JRadioButton specButton = new JRadioButton("Особый", false);
+        specButton.setFocusPainted(false);
         easyButton.addActionListener(e -> level = Level.EASY);
         mediumButton.addActionListener(e -> level = Level.MEDIUM);
         hardButton.addActionListener(e -> level = Level.HARD);
-        specButton = new JRadioButton("Особый", false);
-        specButton.setFocusPainted(false);
+        specButton.addActionListener(e -> level = null);
 
         easyButton.addActionListener(e -> hideSpecialMode());
         mediumButton.addActionListener(e -> hideSpecialMode());
@@ -152,17 +157,16 @@ public class SettingsFrame extends JDialog {
         minesLabel.setEnabled(false);
     }
 
-    public void visibleControl(){
-        if (isVisible()){
+    public void visibleControl() {
+        if (isVisible()) {
             setVisible(false);
-        }
-        else {
+        } else {
             setVisible(true);
         }
     }
 
-    public static SettingsFrame getSettingFrame(){
-        if (settingsFrame == null){
+    public static SettingsFrame getSettingFrame() {
+        if (settingsFrame == null) {
             settingsFrame = new SettingsFrame();
         }
         return settingsFrame;

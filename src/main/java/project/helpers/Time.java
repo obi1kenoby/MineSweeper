@@ -19,33 +19,33 @@ public class Time implements Runnable {
     public void run() {
         int seconds = 0;
         int minutes = 0;
-        while (true) {
-            seconds++;
-            try {
+        try {
+            while (true) {
+                seconds++;
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (seconds == 60) {
-                minutes++;
-                if (minutes == 60) {
-                    minutes = 0;
+                if (seconds == 60) {
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                    }
+                    seconds = 0;
                 }
-                seconds = 0;
-            }
-            if (minutes < 10) {
-                if (seconds < 10) {
-                   label.setText("0" + minutes + ":0" + seconds);
+                if (minutes < 10) {
+                    if (seconds < 10) {
+                        label.setText("0" + minutes + ":0" + seconds);
+                    } else {
+                        label.setText("0" + minutes + ":" + seconds);
+                    }
                 } else {
-                    label.setText("0" + minutes + ":" + seconds);
-                }
-            } else {
-                if (seconds < 10) {
-                    label.setText(minutes + ":0" + seconds);
-                } else {
-                    label.setText(minutes + ":" + seconds);
+                    if (seconds < 10) {
+                        label.setText(minutes + ":0" + seconds);
+                    } else {
+                        label.setText(minutes + ":" + seconds);
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

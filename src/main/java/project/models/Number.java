@@ -14,8 +14,6 @@ public class Number extends Cell{
         setStatus(Status.NUMBER);
     }
 
-    public Number() {}
-
     public int getValue() {
         return value;
     }

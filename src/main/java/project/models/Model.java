@@ -22,6 +22,14 @@ public class Model implements Serializable{
     private Set<Cell> cells = new HashSet<>();
     private final Random random;
 
+    public Model(int inputX, int inputY, int height, int width, int totalMines){
+        this.X = inputX;
+        this.Y = inputY;
+        this.height = height;
+        this.width = width;
+        this.totalMines = totalMines;
+        random = new Random();
+    }
 
     public Model(Level level, int inputX, int inputY) {
         this.X = inputX;
@@ -49,6 +57,7 @@ public class Model implements Serializable{
         removeInitialCell();
         createNumbers();
         crateEmpties();
+        cells.stream().filter(cell -> cell.getStatus().equals(Status.MINE)).forEach(System.out::println);
     }
 
     public void createNumbers(){

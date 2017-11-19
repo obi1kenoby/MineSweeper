@@ -9,6 +9,10 @@ import project.view.GameOverFrame;
 
 import javax.swing.*;
 
+/**
+ * @author Alexander Naumov on 19.11.2017.
+ * @version 1.0.0
+ */
 
 public class GameOver implements Runnable {
 
@@ -29,12 +33,13 @@ public class GameOver implements Runnable {
             for (Cell cell : model.getCells()) {
                 if (cell.getStatus().equals(Status.MINE)) {
                     Thread.sleep(100);
-                    buttons[cell.getY() - 1][cell.getX() - 1].setIcon(mine);
+                    buttons[cell.getX() - 1][cell.getY() - 1].setIcon(mine);
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+        gameFrame.setEnabled(true);
         GameOverFrame gameOverFrame = GameOverFrame.getGameOverFrame();
         gameOverFrame.visibleControl();
     }

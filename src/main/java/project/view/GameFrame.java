@@ -53,9 +53,6 @@ public final class GameFrame extends JFrame {
         settingsFrame.setGameController(mainController);
     }
 
-    private GameFrame() {
-    }
-
     private void init() {
         timeLabel = new JLabel();
         rootPanel = new JPanel(new BorderLayout(20, 20));
@@ -66,11 +63,10 @@ public final class GameFrame extends JFrame {
 
         buttonPanel.setPreferredSize(new Dimension(200, 200));
         timeLabel.setPreferredSize(new Dimension(200, 20));
-
-
-        buttons = new JButton[heightField][widthField];
-        for (int x = 0; x < heightField; x++) {
-            for (int y = 0; y < widthField; y++) {
+        timeLabel.setText("00:00");
+        buttons = new JButton[widthField][heightField];
+        for (int x = 0; x < widthField; x++) {
+            for (int y = 0; y < heightField; y++) {
                 buttons[x][y] = new JButton();
                 buttons[x][y].setFocusPainted(false);
                 buttonPanel.add(buttons[x][y]);

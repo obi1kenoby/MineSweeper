@@ -31,7 +31,7 @@ public class PaintField implements Runnable{
             int y = ys.get(random.nextInt(ys.size()));
             buttons[x][y].setIcon(image);
             try {
-                Thread.sleep(10);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -40,8 +40,8 @@ public class PaintField implements Runnable{
 
     private List<Integer> yRange(int currentX) {
         List<Integer> list = new ArrayList<>();
-        for (int x = 0; x < height; x++) {
-            for (int y = 0; y < width; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (currentX == x && buttons[x][y].getIcon() == null) {
                     list.add(y);
                 }
@@ -52,8 +52,8 @@ public class PaintField implements Runnable{
 
     private List<Integer> xRange() {
         List<Integer> list = new ArrayList<>();
-        for (int x = 0; x < height; x++) {
-            for (int y = 0; y < width; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (buttons[x][y].getIcon() == null) {
                     if (!list.contains(x)) list.add(x);
                 }

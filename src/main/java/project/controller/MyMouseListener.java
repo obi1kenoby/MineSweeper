@@ -1,5 +1,6 @@
 package project.controller;
 
+import project.helpers.Time;
 import project.level.Level;
 import project.helpers.GameOver;
 import project.models.Cell;
@@ -24,10 +25,11 @@ public class MyMouseListener implements MouseListener {
 
     private final int x;
     private final int y;
+    private Thread timer;
     private int width;
     private int height;
     private Model model;
-    private final Level level;
+    private Level level;
     private List<MyMouseListener> listenersList;
     private final JButton[][] buttons;
     private final ImageIcon accentuated = new ImageIcon("images/accentuated.png");
@@ -44,7 +46,7 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images/7.png");
     private final ImageIcon eight = new ImageIcon("images/8.png");
 
-    public MyMouseListener(List<MyMouseListener> listenersList, int x, int y, Level level, int width, int height, JButton[][] buttons) {
+    public MyMouseListener(List<MyMouseListener> listenersList, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
         this.listenersList = listenersList;
         this.x = x;
         this.y = y;
@@ -52,25 +54,28 @@ public class MyMouseListener implements MouseListener {
         this.height = height;
         this.level = level;
         this.buttons = buttons;
+        this.timer = timer;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         int modifiers = e.getModifiers();
         if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
-            if (model == null){
+            if (model == null) {
                 model = new Model(level, x + 1, y + 1);
+                timer.start();
                 listenersList.forEach(listener -> listener.setModel(model));
             }
             openButton(x, y);
         }
         if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
-            if (!buttons[y][x].isEnabled() && buttons[y][x].getDisabledIcon().equals(flag)) {
-                buttons[y][x].setEnabled(true);
-                buttons[y][x].setDisabledIcon(def);
+            if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(flag)) {
+                buttons[x][y].setEnabled(true);
+                buttons[x][y].setDisabledIcon(def);
             } else if (buttons[y][x].isEnabled()) {
-                buttons[y][x].setEnabled(false);
-                buttons[y][x].setDisabledIcon(flag);
+                buttons[x][y].setEnabled(false);
+                buttons[x][y].setDisabledIcon(flag);
+                timer.interrupt();
             }
         }
     }
@@ -87,12 +92,12 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        buttons[y][x].setIcon(accentuated);
+        buttons[x][y].setIcon(accentuated);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        buttons[y][x].setIcon(def);
+        buttons[x][y].setIcon(def);
     }
 
     private void setNumber(JButton button, int value) {
@@ -126,7 +131,7 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void openButton(int x, int y) {
-        if (!buttons[y][x].isEnabled()) {
+        if (!buttons[x][y].isEnabled()) {
             return;
         }
         for (Cell cell : model.getCells()) {
@@ -134,14 +139,14 @@ public class MyMouseListener implements MouseListener {
                 Status status = cell.getStatus();
                 switch (status) {
                     case EMPTY:
-                        buttons[y][x].setEnabled(false);
-                        buttons[y][x].setDisabledIcon(empty);
+                        buttons[x][y].setEnabled(false);
+                        buttons[x][y].setDisabledIcon(empty);
                         if (x == 0) {
                             openButton(x + 1, y);
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x + 1, y + 1);
-                            } else if (0 < y && y < width - 1) {
+                            } else if (0 < y && y < height - 1) {
                                 openButton(x, y - 1);
                                 openButton(x, y + 1);
                                 openButton(x + 1, y - 1);
@@ -150,14 +155,14 @@ public class MyMouseListener implements MouseListener {
                                 openButton(x, y - 1);
                                 openButton(x + 1, y - 1);
                             }
-                        } else if (0 < x && x < height - 1) {
+                        } else if (0 < x && x < width - 1) {
                             openButton(x + 1, y);
                             openButton(x - 1, y);
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x - 1, y + 1);
                                 openButton(x + 1, y + 1);
-                            } else if (0 < y && y < width - 1) {
+                            } else if (0 < y && y < height - 1) {
                                 openButton(x - 1, y - 1);
                                 openButton(x + 1, y - 1);
                                 openButton(x, y - 1);
@@ -174,7 +179,7 @@ public class MyMouseListener implements MouseListener {
                             if (y == 0) {
                                 openButton(x, y + 1);
                                 openButton(x - 1, y + 1);
-                            } else if (0 < y && y < width - 1) {
+                            } else if (0 < y && y < height - 1) {
                                 openButton(x, y - 1);
                                 openButton(x, y + 1);
                                 openButton(x - 1, y - 1);
@@ -187,11 +192,12 @@ public class MyMouseListener implements MouseListener {
                         break;
                     case NUMBER:
                         int value = ((Number) cell).getValue();
-                        setNumber(buttons[y][x], value);
+                        setNumber(buttons[x][y], value);
                         break;
                     case MINE:
-                        buttons[y][x].setEnabled(false);
-                        buttons[y][x].setDisabledIcon(mine);
+                        buttons[x][y].setEnabled(false);
+                        buttons[x][y].setDisabledIcon(mine);
+                        timer.interrupt();
                         new Thread(new GameOver(model, buttons)).start();
                 }
             }
