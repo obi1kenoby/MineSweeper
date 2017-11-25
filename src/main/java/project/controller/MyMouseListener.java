@@ -1,6 +1,6 @@
 package project.controller;
 
-import project.helpers.Time;
+
 import project.level.Level;
 import project.helpers.GameOver;
 import project.models.Cell;
@@ -14,7 +14,7 @@ import java.util.List;
 import javax.swing.*;
 
 import project.models.Status;
-import project.view.GameFrame;
+import project.view.SettingsFrame;
 
 /**
  * @author Alexander Naumov on 28.10.2017
@@ -62,7 +62,25 @@ public class MyMouseListener implements MouseListener {
         int modifiers = e.getModifiers();
         if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
             if (model == null) {
-                model = new Model(level, x + 1, y + 1);
+                if (level.equals(Level.SPECIAL)) {
+                    SettingsFrame settingsFrame = SettingsFrame.getSettingFrame();
+                    int mines;
+                    try {
+                        mines = Integer.parseInt(settingsFrame.getMinesField().getText());
+                    }
+                    catch (Exception ex){
+                        mines = 10;
+                    }
+                    model = new Model(x +1, y +1, height, width, mines);
+                }
+                else {
+                    model = new Model(level, x + 1, y + 1);
+                }
+                model.initialCell();
+                model.createMines();
+                model.removeInitialCell();
+                model.createNumbers();
+                model.crateEmpties();
                 timer.start();
                 listenersList.forEach(listener -> listener.setModel(model));
             }

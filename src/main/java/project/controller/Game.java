@@ -1,6 +1,5 @@
 package project.controller;
 
-import project.helpers.Time;
 import project.level.Level;
 import project.helpers.PaintField;
 
@@ -30,6 +29,8 @@ public class Game implements Runnable {
         this.level = level;
         this.timer = timer;
     }
+
+
 
     @Override
     public void run() {

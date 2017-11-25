@@ -52,12 +52,8 @@ public class Model implements Serializable{
                 break;
         }
         random = new Random();
-        initialCell();
-        createMines();
-        removeInitialCell();
-        createNumbers();
-        crateEmpties();
-        cells.stream().filter(cell -> cell.getStatus().equals(Status.MINE)).forEach(System.out::println);
+        long count = cells.stream().filter(cell -> cell.getStatus().equals(Status.MINE)).count();
+        //System.out.println(count);
     }
 
     public void createNumbers(){
@@ -244,6 +240,7 @@ public class Model implements Serializable{
         }
     }
 
+    //todo
     private int randomX() {
         List<Integer> freeX = new ArrayList<>();
         for (int x = 1; x <= width; x++) {
@@ -251,7 +248,7 @@ public class Model implements Serializable{
             for (Cell cell : cells) {
                 if (x == cell.getX()) counter++;
             }
-            if (counter < width) freeX.add(x);
+            if (counter < height) freeX.add(x);
         }
         return freeX.get(random.nextInt(freeX.size()));
     }

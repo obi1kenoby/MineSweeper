@@ -2,6 +2,7 @@ package project.view;
 
 
 import project.controller.GameController;
+import project.helpers.FieldSizeValidator;
 import project.level.Level;
 
 import javax.swing.*;
@@ -17,9 +18,9 @@ import java.awt.*;
 public class SettingsFrame extends JDialog {
 
     private GameController gameController;
-    private JTextField height;
-    private JTextField width;
-    private JTextField mines;
+    private JTextField heightField;
+    private JTextField widthField;
+    private JTextField minesField;
     private JLabel heightLabel;
     private JLabel widthLabel;
     private JLabel minesLabel;
@@ -42,27 +43,30 @@ public class SettingsFrame extends JDialog {
         JPanel widthPanel = new JPanel();
         JPanel minePanel = new JPanel();
 
-        height = new JTextField(5);
-        width = new JTextField(5);
-        mines = new JTextField(5);
-
         heightLabel = new JLabel("Высота (9-24)");
         widthLabel = new JLabel("Ширина (9-30)");
-        minesLabel = new JLabel("Мины (10-688)");
+        minesLabel = new JLabel("Мины (10-590)");
 
-        height.setEnabled(false);
-        width.setEnabled(false);
-        mines.setEnabled(false);
+        heightField = new JTextField(5);
+        heightField.setInputVerifier(new FieldSizeValidator(heightLabel));
+        widthField = new JTextField(5);
+        widthField.setInputVerifier(new FieldSizeValidator(widthLabel));
+        minesField = new JTextField(5);
+        minesField.setInputVerifier(new FieldSizeValidator(minesLabel));
+
+        heightField.setEnabled(false);
+        widthField.setEnabled(false);
+        minesField.setEnabled(false);
         heightLabel.setEnabled(false);
         widthLabel.setEnabled(false);
         minesLabel.setEnabled(false);
 
         heightPanel.add(heightLabel);
-        heightPanel.add(height);
+        heightPanel.add(heightField);
         widthPanel.add(widthLabel);
-        widthPanel.add(width);
+        widthPanel.add(widthField);
         minePanel.add(minesLabel);
-        minePanel.add(mines);
+        minePanel.add(minesField);
 
         ButtonGroup group = new ButtonGroup();
         JRadioButton easyButton = new JRadioButton("<html>Новичок<br>10 мин<br>поле 9 х 9</html>", true);
@@ -76,15 +80,18 @@ public class SettingsFrame extends JDialog {
         easyButton.addActionListener(e -> level = Level.EASY);
         mediumButton.addActionListener(e -> level = Level.MEDIUM);
         hardButton.addActionListener(e -> level = Level.HARD);
-        specButton.addActionListener(e -> level = null);
+        specButton.addActionListener(e -> level = Level.SPECIAL);
 
         easyButton.addActionListener(e -> hideSpecialMode());
         mediumButton.addActionListener(e -> hideSpecialMode());
         hardButton.addActionListener(e -> hideSpecialMode());
         specButton.addActionListener(e -> {
-            height.setEnabled(true);
-            width.setEnabled(true);
-            mines.setEnabled(true);
+            heightLabel.setForeground(Color.black);
+            widthLabel.setForeground(Color.black);
+            minesLabel.setForeground(Color.black);
+            heightField.setEnabled(true);
+            widthField.setEnabled(true);
+            minesField.setEnabled(true);
             heightLabel.setEnabled(true);
             widthLabel.setEnabled(true);
             minesLabel.setEnabled(true);
@@ -105,12 +112,27 @@ public class SettingsFrame extends JDialog {
         ok.setFocusPainted(false);
 
         ok.addActionListener(e -> {
-            gameController.setLevel(level);
-            gameController.newGame();
-            GameFrame gameFrame = GameFrame.getFrame();
-            gameFrame.repaint();
-            gameFrame.pack();
-            visibleControl();
+            if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)){
+                if(level.equals(Level.SPECIAL)){
+                    try{
+                        int h = Integer.parseInt(heightField.getText());
+                        int w = Integer.parseInt(widthField.getText());
+                        gameController.setSpecialParams(h, w);
+                    }
+                    catch (Exception ex){
+                        JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
+                    }
+                }
+                gameController.setLevel(level);
+                gameController.newGame();
+                GameFrame gameFrame = GameFrame.getFrame();
+                visibleControl();
+                gameFrame.repaint();
+                gameFrame.pack();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
+            }
         });
         close.addActionListener(e -> visibleControl());
 
@@ -149,9 +171,9 @@ public class SettingsFrame extends JDialog {
     }
 
     private void hideSpecialMode() {
-        height.setEnabled(false);
-        width.setEnabled(false);
-        mines.setEnabled(false);
+        heightField.setEnabled(false);
+        widthField.setEnabled(false);
+        minesField.setEnabled(false);
         heightLabel.setEnabled(false);
         widthLabel.setEnabled(false);
         minesLabel.setEnabled(false);
@@ -176,8 +198,27 @@ public class SettingsFrame extends JDialog {
         this.gameController = gameController;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        new SettingsFrame();
+    public JTextField getMinesField() {
+        return minesField;
+    }
+
+    public JLabel getHeightLabel() {
+        return heightLabel;
+    }
+
+    public JLabel getWidthLabel() {
+        return widthLabel;
+    }
+
+    public JLabel getMinesLabel() {
+        return minesLabel;
+    }
+
+    public JTextField getHeightField() {
+        return heightField;
+    }
+
+    public JTextField getWidthField() {
+        return widthField;
     }
 }

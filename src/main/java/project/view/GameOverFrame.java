@@ -39,6 +39,11 @@ public class GameOverFrame extends JDialog {
         restart.setFocusPainted(false);
         newGame.setFocusPainted(false);
 
+        newGame.addActionListener(e ->{
+            GameFrame gameFrame = GameFrame.getFrame();
+            gameFrame.setEnabled(true);
+            visibleControl();
+        });
         exit.addActionListener(e -> System.exit(0));
 
         buttonPanel.setBorder(new EmptyBorder(10, 10, 10, 10));

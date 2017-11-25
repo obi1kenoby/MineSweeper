@@ -6,5 +6,5 @@ package project.level;
  */
 
 public enum Level {
-    EASY, MEDIUM, HARD
+    EASY, MEDIUM, HARD, SPECIAL
 }

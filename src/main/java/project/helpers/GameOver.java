@@ -39,7 +39,6 @@ public class GameOver implements Runnable {
         }catch (Exception e){
             e.printStackTrace();
         }
-        gameFrame.setEnabled(true);
         GameOverFrame gameOverFrame = GameOverFrame.getGameOverFrame();
         gameOverFrame.visibleControl();
     }

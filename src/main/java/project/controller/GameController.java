@@ -13,14 +13,12 @@ public class GameController {
     private int width;
     private Level level;
     private Thread timer;
-    private JPanel rootPanel;
     private JLabel timeLabel;
     private JPanel buttonPanel;
     private JButton[][] buttons;
 
-    public GameController(JLabel timeLabel, JPanel rootPanel, JPanel buttonPanel, JButton[][] buttons, Level level) {
+    public GameController(JLabel timeLabel, JPanel buttonPanel, JButton[][] buttons, Level level) {
         this.timeLabel = timeLabel;
-        this.rootPanel = rootPanel;
         this.buttonPanel = buttonPanel;
         this.buttons = buttons;
         this.level = level;
@@ -46,22 +44,21 @@ public class GameController {
 
     public void prepareLevel(Level level) {
         System.out.println("prepare " + level + " level");
-        if (level.equals(Level.EASY)) {
-            height = 9;
-            width = 9;
-            buttonPanel.setPreferredSize(new Dimension(210, 210));
-            rootPanel.repaint();
-        } else if (level.equals(Level.MEDIUM)) {
-            height = 16;
-            width = 16;
-            buttonPanel.setPreferredSize(new Dimension(420, 420));
-            rootPanel.repaint();
-        } else {
-            height = 16;
-            width = 30;
-            buttonPanel.setPreferredSize(new Dimension(784, 420));
-            rootPanel.repaint();
+        switch (level) {
+            case EASY:
+                height = 9;
+                width = 9;
+                break;
+            case MEDIUM:
+                height = 16;
+                width = 16;
+                break;
+            case HARD:
+                height = 16;
+                width = 30;
+                break;
         }
+        buttonPanel.setPreferredSize(new Dimension((width * 23), (height * 23)));
         buttonPanel.setLayout(new GridLayout(height, width, 1, 1));
         buttons = new JButton[width][height];
         timeLabel.setText("00:00");
@@ -72,5 +69,10 @@ public class GameController {
                 buttonPanel.add(buttons[x][y]);
             }
         }
+    }
+
+    public void setSpecialParams(int h, int w) {
+        this.height = h;
+        this.width = w;
     }
 }

@@ -16,6 +16,7 @@ public final class GameFrame extends JFrame {
 
     private GameController mainController;
     private SettingsFrame settingsFrame;
+    private InfoFrame infoFrame;
     private static GameFrame frame;
     private JLabel timeLabel;
     private JButton[][] buttons;
@@ -48,9 +49,10 @@ public final class GameFrame extends JFrame {
                 break;
         }
         init();
-        mainController = new GameController(timeLabel, rootPanel, buttonPanel, buttons, level);
+        mainController = new GameController(timeLabel, buttonPanel, buttons, level);
         settingsFrame = SettingsFrame.getSettingFrame();
         settingsFrame.setGameController(mainController);
+        infoFrame = InfoFrame.getInfoFrame();
     }
 
     private void init() {
@@ -76,11 +78,11 @@ public final class GameFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         JMenu game = new JMenu("Игра");
+        JMenu about = new JMenu("Справка");
         newGame = new JMenuItem("Новая игра");
         settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
-        JMenu about = new JMenu("Справка");
         statistic = new JMenuItem("Статистика");
         game.add(newGame);
         game.add(statistic);
@@ -123,6 +125,9 @@ public final class GameFrame extends JFrame {
         KeyStroke f4 = KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0);
         statistic.setAccelerator(f4);
 
+        KeyStroke f1 = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
+        info.setAccelerator(f1);
+        info.addActionListener(e -> infoFrame.setVisible(true));
 
         close.addActionListener(e -> System.exit(0));
     }
