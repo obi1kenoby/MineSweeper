@@ -31,6 +31,8 @@ public final class GameFrame extends JFrame {
     private int widthField;
     private Level level;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
+    private final ImageIcon alarm = new ImageIcon("images\\alarm.png");
+    private final ImageIcon flagicon = new ImageIcon("images\\flagicon.png");
 
     private GameFrame(Level level) {
         this.level = level;
@@ -49,23 +51,49 @@ public final class GameFrame extends JFrame {
                 break;
         }
         init();
-        mainController = new GameController(timeLabel, buttonPanel, buttons, level);
+        mainController = GameController.gameController(timeLabel, buttonPanel, buttons, level);
         settingsFrame = SettingsFrame.getSettingFrame();
         settingsFrame.setGameController(mainController);
         infoFrame = InfoFrame.getInfoFrame();
     }
 
     private void init() {
-        timeLabel = new JLabel();
-        rootPanel = new JPanel(new BorderLayout(20, 20));
-        southPanel = new JPanel(new GridLayout(1, 2));
+        Font myFont = new Font("Arial", Font.BOLD, 12);
+        rootPanel = new JPanel(new BorderLayout());
+        southPanel = new JPanel();
+
         GridLayout layout = new GridLayout(heightField, widthField,1,1);
         buttonPanel = new JPanel(layout);
         buttonPanel.setBackground(Color.black);
 
         buttonPanel.setPreferredSize(new Dimension(200, 200));
-        timeLabel.setPreferredSize(new Dimension(200, 20));
-        timeLabel.setText("00:00");
+        timeLabel = new JLabel("00:00", SwingConstants.CENTER);
+        timeLabel.setPreferredSize(new Dimension(40, 20));
+        timeLabel.setOpaque(true);
+        timeLabel.setForeground(Color.white);
+        timeLabel.setBackground(new Color(60, 90, 255));
+        timeLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+        timeLabel.setFont(myFont);
+        //
+        JLabel timeIcon = new JLabel();
+        timeIcon.setPreferredSize(new Dimension(20, 20));
+        timeIcon.setIcon(alarm);
+
+        JLabel empty = new JLabel();
+        empty.setPreferredSize(new Dimension(25, 20));
+        //
+        JLabel flagLabel = new JLabel("0", SwingConstants.CENTER);
+        flagLabel.setPreferredSize(new Dimension(40, 20));
+        flagLabel.setOpaque(true);
+        flagLabel.setForeground(Color.white);
+        flagLabel.setBackground(new Color(60, 90, 255));
+        flagLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+        flagLabel.setFont(myFont);
+        //
+        JLabel flag = new JLabel();
+        flag.setPreferredSize(new Dimension(20, 20));
+        flag.setIcon(flagicon);
+        //
         buttons = new JButton[widthField][heightField];
         for (int x = 0; x < widthField; x++) {
             for (int y = 0; y < heightField; y++) {
@@ -94,12 +122,16 @@ public final class GameFrame extends JFrame {
         menuBar.add(game);
         menuBar.add(about);
 
+        southPanel.add(timeIcon);
         southPanel.add(timeLabel);
-        rootPanel.add(new JPanel(), BorderLayout.EAST);
-        rootPanel.add(new JPanel(), BorderLayout.WEST);
-        rootPanel.add(new JPanel(), BorderLayout.NORTH);
-        rootPanel.add(buttonPanel, BorderLayout.CENTER);
-        rootPanel.add(southPanel, BorderLayout.SOUTH);
+        southPanel.add(empty);
+        southPanel.add(flagLabel);
+        southPanel.add(flag);
+        rootPanel.add(new JPanel(), "East");
+        rootPanel.add(new JPanel(), "West");
+        rootPanel.add(new JPanel(), "North");
+        rootPanel.add(buttonPanel, "Center");
+        rootPanel.add(southPanel, "South");
         add(rootPanel);
 
         pack();
@@ -166,6 +198,10 @@ public final class GameFrame extends JFrame {
 
     public int getWidthField() {
         return widthField;
+    }
+
+    public GameController getMainController() {
+        return mainController;
     }
 
     public static GameFrame getFrame(Level level) {

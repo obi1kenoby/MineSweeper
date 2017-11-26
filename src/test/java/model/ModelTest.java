@@ -57,7 +57,7 @@ public class ModelTest {
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
         int initCells;
-        Model model = new Model(level, x, y);
+        Model model = new Model(level, x, y, 5000);
         model.initialCell();
         if (x == 1) {
             if (y == 1) {
@@ -93,7 +93,7 @@ public class ModelTest {
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
         int minesCounter = 0;
-        Model model = new Model(level, x, y);
+        Model model = new Model(level, x, y, 5000);
         model.initialCell();
         model.createMines();
         for (Cell cell : model.getCells()) {
@@ -107,7 +107,7 @@ public class ModelTest {
         Random random = new Random();
         int x = random.nextInt(width) + 1;
         int y = random.nextInt(height) + 1;
-        Model model = new Model(level, x, y);
+        Model model = new Model(level, x, y, 5000);
         model.initialCell();
         model.createMines();
         List<Cell> initCells = model.getCells().stream().
@@ -129,7 +129,7 @@ public class ModelTest {
         Random random = new Random();
         int X = random.nextInt(width) + 1;
         int Y = random.nextInt(height) + 1;
-        Model model = new Model(level, X, Y);
+        Model model = new Model(level, X, Y, 5000);
         model.initialCell();
         model.createMines();
         model.removeInitialCell();

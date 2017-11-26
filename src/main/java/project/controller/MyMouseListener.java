@@ -11,6 +11,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.Random;
 import javax.swing.*;
 
 import project.models.Status;
@@ -25,6 +26,7 @@ public class MyMouseListener implements MouseListener {
 
     private final int x;
     private final int y;
+    private long seed;
     private Thread timer;
     private int width;
     private int height;
@@ -71,10 +73,11 @@ public class MyMouseListener implements MouseListener {
                     catch (Exception ex){
                         mines = 10;
                     }
-                    model = new Model(x +1, y +1, height, width, mines);
+
+                    model = new Model(x +1, y +1, height, width, mines, seed);
                 }
                 else {
-                    model = new Model(level, x + 1, y + 1);
+                    model = new Model(level, x + 1, y + 1, seed);
                 }
                 model.initialCell();
                 model.createMines();
@@ -224,5 +227,9 @@ public class MyMouseListener implements MouseListener {
 
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
     }
 }

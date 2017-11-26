@@ -2,7 +2,6 @@ package project.models;
 
 import project.level.Level;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  */
 
-public class Model implements Serializable{
+public class Model {
 
     private static final long serialVersionUID = 2491939809417725173L;
     private int height;
@@ -22,16 +21,16 @@ public class Model implements Serializable{
     private Set<Cell> cells = new HashSet<>();
     private final Random random;
 
-    public Model(int inputX, int inputY, int height, int width, int totalMines){
+    public Model(int inputX, int inputY, int height, int width, int totalMines, long seed){
         this.X = inputX;
         this.Y = inputY;
         this.height = height;
         this.width = width;
         this.totalMines = totalMines;
-        random = new Random();
+        random = new Random(seed);
     }
 
-    public Model(Level level, int inputX, int inputY) {
+    public Model(Level level, int inputX, int inputY, long seed) {
         this.X = inputX;
         this.Y = inputY;
         switch (level) {
@@ -51,7 +50,7 @@ public class Model implements Serializable{
                 height = 16;
                 break;
         }
-        random = new Random();
+        random = new Random(seed);
     }
 
     public void createNumbers(){

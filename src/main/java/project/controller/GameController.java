@@ -2,10 +2,10 @@ package project.controller;
 
 import project.helpers.Time;
 import project.level.Level;
-import project.view.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 
 public class GameController {
@@ -17,8 +17,10 @@ public class GameController {
     private JLabel timeLabel;
     private JPanel buttonPanel;
     private JButton[][] buttons;
+    private static GameController gameController;
+    private long seed;
 
-    public GameController(JLabel timeLabel, JPanel buttonPanel, JButton[][] buttons, Level level) {
+    private GameController(JLabel timeLabel, JPanel buttonPanel, JButton[][] buttons, Level level) {
         this.timeLabel = timeLabel;
         this.buttonPanel = buttonPanel;
         this.buttons = buttons;
@@ -36,10 +38,25 @@ public class GameController {
         if (timer != null) {
             timer.interrupt();
         }
+
+        Random random = new Random();
+        seed = random.nextInt(1000000);
+
         timer = new Thread(new Time(timeLabel));
         prepareLevel(level);
-        new Thread(new Game(height, width, buttons, timeLabel, level, timer)).start();
+        new Thread(new Game(height, width, buttons, timeLabel, level, timer, seed)).start();
         System.out.println("create new game.");
+    }
+
+    public void restartGame(){
+        if (timer != null) {
+            timer.interrupt();
+        }
+
+        timer = new Thread(new Time(timeLabel));
+        prepareLevel(level);
+        new Thread(new Game(height, width, buttons, timeLabel, level, timer, seed)).start();
+        System.out.println("restart new game.");
     }
 
     public void prepareLevel(Level level) {
@@ -75,5 +92,20 @@ public class GameController {
     public void setSpecialParams(int h, int w) {
         this.height = h;
         this.width = w;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+
+    public static GameController gameController(JLabel timeLabel, JPanel buttonPanel, JButton[][] buttons, Level level){
+        if (gameController == null){
+            gameController = new GameController(timeLabel, buttonPanel, buttons, level);
+        }
+        return gameController;
     }
 }

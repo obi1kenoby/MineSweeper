@@ -1,5 +1,7 @@
 package project.view;
 
+import project.controller.GameController;
+
 import java.awt.*;
 
 import javax.swing.*;
@@ -43,7 +45,20 @@ public class GameOverFrame extends JDialog {
             GameFrame gameFrame = GameFrame.getFrame();
             gameFrame.setEnabled(true);
             visibleControl();
+
+            gameFrame.getMainController().newGame();
+            gameFrame.repaint();
         });
+
+        restart.addActionListener(e ->{
+            GameFrame gameFrame = GameFrame.getFrame();
+            gameFrame.setEnabled(true);
+            visibleControl();
+
+            gameFrame.getMainController().restartGame();
+            gameFrame.repaint();
+        });
+
         exit.addActionListener(e -> System.exit(0));
 
         buttonPanel.setBorder(new EmptyBorder(10, 10, 10, 10));

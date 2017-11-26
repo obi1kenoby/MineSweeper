@@ -23,7 +23,7 @@ public class SpecialModelTest {
         Random random = new Random();
         int X = random.nextInt(width) + 1;
         int Y = random.nextInt(height) + 1;
-        Model model = new Model(X, Y, height, width, mines);
+        Model model = new Model(X, Y, height, width, mines, 5000);
         model.initialCell();
         model.createMines();
         model.removeInitialCell();
