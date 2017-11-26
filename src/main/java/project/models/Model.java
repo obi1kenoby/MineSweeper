@@ -52,8 +52,6 @@ public class Model implements Serializable{
                 break;
         }
         random = new Random();
-        long count = cells.stream().filter(cell -> cell.getStatus().equals(Status.MINE)).count();
-        //System.out.println(count);
     }
 
     public void createNumbers(){

@@ -52,7 +52,7 @@ public class SettingsFrame extends JDialog {
         widthField = new JTextField(5);
         widthField.setInputVerifier(new FieldSizeValidator(widthLabel));
         minesField = new JTextField(5);
-        minesField.setInputVerifier(new FieldSizeValidator(minesLabel));
+        //minesField.setInputVerifier(new FieldSizeValidator(minesLabel));
 
         heightField.setEnabled(false);
         widthField.setEnabled(false);

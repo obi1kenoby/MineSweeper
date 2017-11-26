@@ -2,6 +2,7 @@ package project.controller;
 
 import project.helpers.Time;
 import project.level.Level;
+import project.view.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +37,6 @@ public class GameController {
             timer.interrupt();
         }
         timer = new Thread(new Time(timeLabel));
-        buttonPanel.removeAll();
         prepareLevel(level);
         new Thread(new Game(height, width, buttons, timeLabel, level, timer)).start();
         System.out.println("create new game.");
@@ -58,7 +58,8 @@ public class GameController {
                 width = 30;
                 break;
         }
-        buttonPanel.setPreferredSize(new Dimension((width * 23), (height * 23)));
+        buttonPanel.removeAll();
+        buttonPanel.setPreferredSize(new Dimension((width * 23) - 2, (height * 23) - 2));
         buttonPanel.setLayout(new GridLayout(height, width, 1, 1));
         buttons = new JButton[width][height];
         timeLabel.setText("00:00");
