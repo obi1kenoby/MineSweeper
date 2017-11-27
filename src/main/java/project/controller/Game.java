@@ -2,6 +2,7 @@ package project.controller;
 
 import project.level.Level;
 import project.helpers.PaintField;
+import project.models.Model;
 
 import javax.swing.*;
 import java.util.*;
@@ -20,19 +21,24 @@ public class Game implements Runnable {
     private Thread timer;
     private JButton[][] buttons;
     private JLabel timeLabel;
+    private JLabel flagLabel;
+    private Model model;
     private Level level;
 
-    public Game(int height, int width, JButton[][] buttons, JLabel timeLabel, Level level, Thread timer, long seed) {
+    public Game(int height, int width, JButton[][] buttons, JLabel timeLabel, JLabel flagLabel, Level level, Thread timer, long seed) {
         this.height = height;
         this.width = width;
         this.buttons = buttons;
         this.timeLabel = timeLabel;
+        this.flagLabel = flagLabel;
         this.level = level;
         this.timer = timer;
         this.seed = seed;
     }
 
-
+    public void setModel(Model model) {
+        this.model = model;
+    }
 
     @Override
     public void run() {
@@ -40,8 +46,9 @@ public class Game implements Runnable {
         List<MyMouseListener> listenersList = new ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                MyMouseListener myMouseListener = new MyMouseListener(listenersList, x, y, level, width, height, buttons, timer);
+                MyMouseListener myMouseListener = new MyMouseListener(listenersList, flagLabel, x, y, level, width, height, buttons, timer);
                 myMouseListener.setSeed(seed);
+                myMouseListener.setModel(model);
                 listenersList.add(myMouseListener);
                 buttons[x][y].addMouseListener(myMouseListener);
             }

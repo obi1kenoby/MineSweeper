@@ -1,6 +1,7 @@
 package project.models;
 
 import javax.swing.*;
+import java.io.Serializable;
 
 
 /**
@@ -8,8 +9,9 @@ import javax.swing.*;
  * @version 1.0.0
  */
 
-public class Cell {
+public class Cell implements Serializable{
 
+    private static final long serialVersionUID = -266141377718622095L;
     private int x;
     private int y;
     private Status status;

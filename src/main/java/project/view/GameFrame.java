@@ -19,20 +19,18 @@ public final class GameFrame extends JFrame {
     private InfoFrame infoFrame;
     private static GameFrame frame;
     private JLabel timeLabel;
+    private JLabel flagLabel;
     private JButton[][] buttons;
     private JPanel buttonPanel;
     private JPanel rootPanel;
-    private JPanel southPanel;
     private JMenuItem close;
     private JMenuItem newGame;
-    private JMenuItem statistic;
-    private JMenuItem settings;
     private int heightField;
     private int widthField;
     private Level level;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
     private final ImageIcon alarm = new ImageIcon("images\\alarm.png");
-    private final ImageIcon flagicon = new ImageIcon("images\\flagicon.png");
+    private final ImageIcon flagImage = new ImageIcon("images\\flagicon.png");
 
     private GameFrame(Level level) {
         this.level = level;
@@ -51,7 +49,7 @@ public final class GameFrame extends JFrame {
                 break;
         }
         init();
-        mainController = GameController.gameController(timeLabel, buttonPanel, buttons, level);
+        mainController = GameController.gameController(timeLabel, flagLabel, buttonPanel, buttons, level);
         settingsFrame = SettingsFrame.getSettingFrame();
         settingsFrame.setGameController(mainController);
         infoFrame = InfoFrame.getInfoFrame();
@@ -60,7 +58,7 @@ public final class GameFrame extends JFrame {
     private void init() {
         Font myFont = new Font("Arial", Font.BOLD, 12);
         rootPanel = new JPanel(new BorderLayout());
-        southPanel = new JPanel();
+        JPanel southPanel = new JPanel();
 
         GridLayout layout = new GridLayout(heightField, widthField,1,1);
         buttonPanel = new JPanel(layout);
@@ -74,26 +72,26 @@ public final class GameFrame extends JFrame {
         timeLabel.setBackground(new Color(60, 90, 255));
         timeLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         timeLabel.setFont(myFont);
-        //
+
         JLabel timeIcon = new JLabel();
         timeIcon.setPreferredSize(new Dimension(20, 20));
         timeIcon.setIcon(alarm);
 
         JLabel empty = new JLabel();
         empty.setPreferredSize(new Dimension(25, 20));
-        //
-        JLabel flagLabel = new JLabel("0", SwingConstants.CENTER);
+
+        flagLabel = new JLabel("0", SwingConstants.CENTER);
         flagLabel.setPreferredSize(new Dimension(40, 20));
         flagLabel.setOpaque(true);
         flagLabel.setForeground(Color.white);
         flagLabel.setBackground(new Color(60, 90, 255));
         flagLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         flagLabel.setFont(myFont);
-        //
+
         JLabel flag = new JLabel();
         flag.setPreferredSize(new Dimension(20, 20));
-        flag.setIcon(flagicon);
-        //
+        flag.setIcon(flagImage);
+
         buttons = new JButton[widthField][heightField];
         for (int x = 0; x < widthField; x++) {
             for (int y = 0; y < heightField; y++) {
@@ -108,10 +106,10 @@ public final class GameFrame extends JFrame {
         JMenu game = new JMenu("Игра");
         JMenu about = new JMenu("Справка");
         newGame = new JMenuItem("Новая игра");
-        settings = new JMenuItem("Параметры");
+        JMenuItem settings = new JMenuItem("Параметры");
         close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
-        statistic = new JMenuItem("Статистика");
+        JMenuItem statistic = new JMenuItem("Статистика");
         game.add(newGame);
         game.add(statistic);
         game.add(settings);
@@ -161,7 +159,10 @@ public final class GameFrame extends JFrame {
         info.setAccelerator(f1);
         info.addActionListener(e -> infoFrame.setVisible(true));
 
-        close.addActionListener(e -> System.exit(0));
+        close.addActionListener(e -> {
+            mainController.storeGame();
+            System.exit(0);
+        });
     }
 
     public JPanel getRootPanel() {
@@ -212,9 +213,6 @@ public final class GameFrame extends JFrame {
     }
 
     public static GameFrame getFrame() {
-        if (frame == null) {
-            frame = new GameFrame(Level.EASY);
-        }
         return frame;
     }
 }

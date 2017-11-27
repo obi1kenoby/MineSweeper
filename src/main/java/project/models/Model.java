@@ -2,6 +2,7 @@ package project.models;
 
 import project.level.Level;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  */
 
-public class Model {
+public class Model implements Serializable{
 
     private static final long serialVersionUID = 2491939809417725173L;
     private int height;

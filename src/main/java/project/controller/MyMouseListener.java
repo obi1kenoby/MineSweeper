@@ -28,6 +28,7 @@ public class MyMouseListener implements MouseListener {
     private final int y;
     private long seed;
     private Thread timer;
+    private JLabel flagLabel;
     private int width;
     private int height;
     private Model model;
@@ -48,8 +49,9 @@ public class MyMouseListener implements MouseListener {
     private final ImageIcon seven = new ImageIcon("images/7.png");
     private final ImageIcon eight = new ImageIcon("images/8.png");
 
-    public MyMouseListener(List<MyMouseListener> listenersList, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
+    public MyMouseListener(List<MyMouseListener> listenersList, JLabel flagLabel, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
         this.listenersList = listenersList;
+        this.flagLabel = flagLabel;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -86,6 +88,8 @@ public class MyMouseListener implements MouseListener {
                 model.crateEmpties();
                 timer.start();
                 listenersList.forEach(listener -> listener.setModel(model));
+                GameController gameController = GameController.gameController();
+                gameController.setModel(model);
             }
             openButton(x, y);
         }
@@ -96,6 +100,9 @@ public class MyMouseListener implements MouseListener {
             } else if (buttons[y][x].isEnabled()) {
                 buttons[x][y].setEnabled(false);
                 buttons[x][y].setDisabledIcon(flag);
+                int counter = Integer.parseInt(flagLabel.getText());
+                counter++;
+                flagLabel.setText(Integer.toString(counter));
                 timer.interrupt();
             }
         }
