@@ -75,7 +75,6 @@ public class MyMouseListener implements MouseListener {
                     catch (Exception ex){
                         mines = 10;
                     }
-
                     model = new Model(x +1, y +1, height, width, mines, seed);
                 }
                 else {
@@ -86,13 +85,17 @@ public class MyMouseListener implements MouseListener {
                 model.removeInitialCell();
                 model.createNumbers();
                 model.crateEmpties();
-                timer.start();
                 listenersList.forEach(listener -> listener.setModel(model));
                 GameController gameController = GameController.gameController();
                 gameController.setModel(model);
+                timer.start();
+            }
+            else{
+                timer.start();
             }
             openButton(x, y);
         }
+        //todo right click, flag selecting
         if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
             if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(flag)) {
                 buttons[x][y].setEnabled(true);
