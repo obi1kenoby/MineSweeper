@@ -1,6 +1,7 @@
 package project.saver;
 
 
+import project.level.Level;
 import project.models.Model;
 
 import javax.swing.*;
@@ -32,14 +33,16 @@ public class Saver {
         return saver;
     }
 
-    public void save(Model model, JButton[][] buttons, JLabel timer, JLabel flags){
+    public void save(Model model, JButton[][] buttons, JLabel timer, JLabel flags, Level level){
         try(ObjectOutputStream ous = new ObjectOutputStream(new FileOutputStream(file))){
-            objects = new Object[4];
+            objects = new Object[5];
             objects[0] = model;
             objects[1] = buttons;
             objects[2]= timer;
             objects[3] = flags;
+            objects[4] = level;
             ous.writeObject(objects);
+            System.out.println("game successfully saved.");
         }
         catch (Exception e){
             System.out.println("saving game files failed.");
@@ -49,6 +52,7 @@ public class Saver {
     public Object[] read(){
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(path)))){
             objects = (Object[]) ois.readObject();
+            System.out.println("game successfully restoring.");
         }
         catch (Exception e){
             System.out.println("restoring game files failed.");

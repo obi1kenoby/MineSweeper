@@ -17,6 +17,10 @@ import java.awt.*;
 
 public class SettingsFrame extends JDialog {
 
+    private JRadioButton easyButton;
+    private JRadioButton mediumButton;
+    private JRadioButton hardButton;
+    private JRadioButton specButton;
     private GameController gameController;
     private JTextField heightField;
     private JTextField widthField;
@@ -69,23 +73,29 @@ public class SettingsFrame extends JDialog {
         minePanel.add(minesField);
 
         ButtonGroup group = new ButtonGroup();
-        JRadioButton easyButton = new JRadioButton("<html>Новичок<br>10 мин<br>поле 9 х 9</html>", true);
+        easyButton = new JRadioButton("<html>Новичок<br>10 мин<br>поле 9 х 9</html>");
         easyButton.setFocusPainted(false);
-        JRadioButton mediumButton = new JRadioButton("<html>Любитель<br>40 мин<br>поле 16 х 16</html>", false);
+        mediumButton = new JRadioButton("<html>Любитель<br>40 мин<br>поле 16 х 16</html>");
         mediumButton.setFocusPainted(false);
-        JRadioButton hardButton = new JRadioButton("<html>Профессилнал<br>99 мин<br>поле 30 х 16</html>", false);
+        hardButton = new JRadioButton("<html>Профессилнал<br>99 мин<br>поле 30 х 16</html>");
         hardButton.setFocusPainted(false);
-        JRadioButton specButton = new JRadioButton("Особый", false);
+        specButton = new JRadioButton("Особый");
         specButton.setFocusPainted(false);
-        easyButton.addActionListener(e -> level = Level.EASY);
-        mediumButton.addActionListener(e -> level = Level.MEDIUM);
-        hardButton.addActionListener(e -> level = Level.HARD);
-        specButton.addActionListener(e -> level = Level.SPECIAL);
 
-        easyButton.addActionListener(e -> hideSpecialMode());
-        mediumButton.addActionListener(e -> hideSpecialMode());
-        hardButton.addActionListener(e -> hideSpecialMode());
+        easyButton.addActionListener(e -> {
+            level = Level.EASY;
+            hideSpecialMode();
+        });
+        mediumButton.addActionListener(e -> {
+            level = Level.MEDIUM;
+            hideSpecialMode();
+        });
+        hardButton.addActionListener(e -> {
+            level = Level.HARD;
+            hideSpecialMode();
+        });
         specButton.addActionListener(e -> {
+            level = Level.SPECIAL;
             heightLabel.setForeground(Color.black);
             widthLabel.setForeground(Color.black);
             minesLabel.setForeground(Color.black);
@@ -112,14 +122,13 @@ public class SettingsFrame extends JDialog {
         ok.setFocusPainted(false);
 
         ok.addActionListener(e -> {
-            if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)){
-                if(level.equals(Level.SPECIAL)){
-                    try{
+            if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)) {
+                if (level.equals(Level.SPECIAL)) {
+                    try {
                         int h = Integer.parseInt(heightField.getText());
                         int w = Integer.parseInt(widthField.getText());
                         gameController.setSpecialParams(h, w);
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
                     }
                 }
@@ -129,8 +138,7 @@ public class SettingsFrame extends JDialog {
                 visibleControl();
                 gameFrame.repaint();
                 gameFrame.pack();
-            }
-            else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
             }
         });
@@ -220,5 +228,21 @@ public class SettingsFrame extends JDialog {
 
     public JTextField getWidthField() {
         return widthField;
+    }
+
+    public JRadioButton getEasyButton() {
+        return easyButton;
+    }
+
+    public JRadioButton getMediumButton() {
+        return mediumButton;
+    }
+
+    public JRadioButton getHardButton() {
+        return hardButton;
+    }
+
+    public JRadioButton getSpecButton() {
+        return specButton;
     }
 }

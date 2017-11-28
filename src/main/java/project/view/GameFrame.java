@@ -4,6 +4,7 @@ import project.controller.GameController;
 import project.level.Level;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -53,6 +54,8 @@ public final class GameFrame extends JFrame {
         settingsFrame = SettingsFrame.getSettingFrame();
         settingsFrame.setGameController(mainController);
         infoFrame = InfoFrame.getInfoFrame();
+        setVisible(true);
+        pack();
     }
 
     private void init() {
@@ -132,14 +135,11 @@ public final class GameFrame extends JFrame {
         rootPanel.add(southPanel, "South");
         add(rootPanel);
 
-        pack();
         setResizable(false);
         setTitle("Mines v.1.0.1");
         setIconImage(titleIcon.getImage());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setVisible(true);
-
         newGame.addActionListener(e -> {
             mainController.newGame();
             repaint();
@@ -159,9 +159,20 @@ public final class GameFrame extends JFrame {
         info.setAccelerator(f1);
         info.addActionListener(e -> infoFrame.setVisible(true));
 
-        close.addActionListener(e -> {
-            mainController.storeGame();
-            System.exit(0);
+        close.addActionListener((ActionEvent e) -> {
+
+            Object[] options = {"Сохранить", "Не сохранять", "Отмена"};
+            int dialogResult = JOptionPane.showOptionDialog(frame,
+                    "Текущая игра не закончена. Что нужно сделать?",
+                    "Выход из игры", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, options, options[0]);
+            if(dialogResult == JOptionPane.YES_OPTION) {
+                mainController.storeGame();
+                System.exit(0);
+            }
+            if (dialogResult == JOptionPane.NO_OPTION){
+                System.exit(0);
+            }
         });
     }
 

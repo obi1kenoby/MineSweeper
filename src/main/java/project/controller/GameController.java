@@ -4,7 +4,6 @@ import project.helpers.Time;
 import project.level.Level;
 import project.models.Model;
 import project.saver.Saver;
-import project.view.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,17 +49,23 @@ public class GameController {
         Random random = new Random();
         seed = random.nextInt(1000000);
         timer = new Thread(new Time(timeLabel));
-        prepareLevel(level);
 
         if (saver.getFile().exists()){
             restoreGame();
+            int dialogResult = JOptionPane.showConfirmDialog(null,"Продолжить сохраненную игру ?","Обнаружена сохраненная игра.", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.NO_OPTION){
+                prepareLevel(level);
+                Game game = new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed);
+                new Thread(game).start();
+            }
         }
         else {
+            prepareLevel(level);
             Game game = new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed);
             new Thread(game).start();
         }
         saver.deleteSaves();
-        System.out.println("create new game.");
+        System.out.println("created new game.");
     }
 
     public void restartGame(){
@@ -71,7 +76,7 @@ public class GameController {
         timer = new Thread(new Time(timeLabel));
         prepareLevel(level);
         new Thread(new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed)).start();
-        System.out.println("restart new game.");
+        System.out.println("restarted game.");
     }
 
     public void prepareLevel(Level level) {
@@ -106,38 +111,38 @@ public class GameController {
 
     public void restoreGame(){
         Object[] objects = saver.read();
-        Model model = (Model) objects[0];
+        Model restoreModel = (Model) objects[0];
         JButton[][] butts = (JButton[][]) objects[1];
         timeLabel.setText(((JLabel)objects[2]).getText());
         flagLabel.setText(((JLabel)objects[3]).getText());
-        int h = butts.length;
-        int w = butts[0].length;
+        Level restoreLevel = (Level)objects[4];
+        int w = butts.length;
+        int h = butts[0].length;
         buttonPanel.removeAll();
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
+        buttonPanel.setPreferredSize(new Dimension((w * 23) - 2, (h * 23) - 2));
+        buttonPanel.setLayout(new GridLayout(h, w, 1, 1));
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
                 buttonPanel.add(butts[j][i]);
             }
         }
-        Game game = new Game(height, width, butts, timeLabel, flagLabel, level, timer, seed);
-        game.setModel(model);
+        Game game = new Game(h, w, butts, timeLabel, flagLabel, restoreLevel, timer, seed);
+        game.setModel(restoreModel);
         new Thread(game).start();
+        buttons = butts;
+        model = restoreModel;
+        height = h;
+        width = w;
+        level = restoreLevel;
     }
 
     public void storeGame(){
-        saver.save(model, buttons, timeLabel, flagLabel);
+        saver.save(model, buttons, timeLabel, flagLabel, level);
     }
 
     public void setSpecialParams(int h, int w) {
         this.height = h;
         this.width = w;
-    }
-
-    public void setSeed(long seed) {
-        this.seed = seed;
-    }
-
-    public long getSeed() {
-        return seed;
     }
 
     public void setModel(Model model) {
