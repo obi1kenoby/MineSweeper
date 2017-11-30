@@ -23,18 +23,14 @@ public final class GameFrame extends JFrame {
     private JLabel flagLabel;
     private JButton[][] buttons;
     private JPanel buttonPanel;
-    private JPanel rootPanel;
-    private JMenuItem close;
-    private JMenuItem newGame;
     private int heightField;
     private int widthField;
-    private Level level;
     private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
     private final ImageIcon alarm = new ImageIcon("images\\alarm.png");
     private final ImageIcon flagImage = new ImageIcon("images\\flagicon.png");
 
     private GameFrame(Level level) {
-        this.level = level;
+        Level level1 = level;
         switch (level) {
             case EASY:
                 widthField = 9;
@@ -56,11 +52,12 @@ public final class GameFrame extends JFrame {
         infoFrame = InfoFrame.getInfoFrame();
         setVisible(true);
         pack();
+        setLocationRelativeTo(null);
     }
 
     private void init() {
         Font myFont = new Font("Arial", Font.BOLD, 12);
-        rootPanel = new JPanel(new BorderLayout());
+        JPanel rootPanel = new JPanel(new BorderLayout());
         JPanel southPanel = new JPanel();
 
         GridLayout layout = new GridLayout(heightField, widthField,1,1);
@@ -108,9 +105,9 @@ public final class GameFrame extends JFrame {
         setJMenuBar(menuBar);
         JMenu game = new JMenu("Игра");
         JMenu about = new JMenu("Справка");
-        newGame = new JMenuItem("Новая игра");
+        JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem settings = new JMenuItem("Параметры");
-        close = new JMenuItem("Выйти");
+        JMenuItem close = new JMenuItem("Выйти");
         JMenuItem info = new JMenuItem("О программе");
         JMenuItem statistic = new JMenuItem("Статистика");
         game.add(newGame);
@@ -139,7 +136,7 @@ public final class GameFrame extends JFrame {
         setTitle("Mines v.1.0.1");
         setIconImage(titleIcon.getImage());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+
         newGame.addActionListener(e -> {
             mainController.newGame();
             repaint();
@@ -174,42 +171,6 @@ public final class GameFrame extends JFrame {
                 System.exit(0);
             }
         });
-    }
-
-    public JPanel getRootPanel() {
-        return rootPanel;
-    }
-
-    public JMenuItem getClose() {
-        return close;
-    }
-
-    public JMenuItem getNewGame() {
-        return newGame;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public JButton[][] getButtons() {
-        return buttons;
-    }
-
-    public JPanel getButtonPanel() {
-        return buttonPanel;
-    }
-
-    public JLabel getTimeLabel() {
-        return timeLabel;
-    }
-
-    public int getHeightField() {
-        return heightField;
-    }
-
-    public int getWidthField() {
-        return widthField;
     }
 
     public GameController getMainController() {

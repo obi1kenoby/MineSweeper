@@ -1,6 +1,7 @@
 package project.helpers;
 
 
+import project.controller.GameController;
 import project.models.Cell;
 import project.models.Model;
 import project.models.Status;
@@ -8,6 +9,7 @@ import project.view.GameFrame;
 import project.view.GameOverFrame;
 
 import javax.swing.*;
+import java.util.Date;
 
 /**
  * @author Alexander Naumov on 19.11.2017.
@@ -39,7 +41,11 @@ public class GameOver implements Runnable {
         }catch (Exception e){
             e.printStackTrace();
         }
+        GameController gameController = GameController.gameController();
+        String time = gameController.getTimeLabel().getText();
         GameOverFrame gameOverFrame = GameOverFrame.getGameOverFrame();
+        gameOverFrame.setTime(time);
+        gameOverFrame.setDate(new Date());
         gameOverFrame.visibleControl();
     }
 }

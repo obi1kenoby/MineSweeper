@@ -17,8 +17,10 @@ public class Time implements Runnable {
 
     @Override
     public void run() {
-        int seconds = 0;
-        int minutes = 0;
+        String string = label.getText();
+        String[] array = string.split(":");
+        int seconds = Integer.parseInt(array[1]);
+        int minutes = Integer.parseInt(array[0]);
         try {
             while (true) {
                 seconds++;

@@ -55,6 +55,7 @@ public class SettingsFrame extends JDialog {
         heightField.setInputVerifier(new FieldSizeValidator(heightLabel));
         widthField = new JTextField(5);
         widthField.setInputVerifier(new FieldSizeValidator(widthLabel));
+        //todo verification of mines field
         minesField = new JTextField(5);
         //minesField.setInputVerifier(new FieldSizeValidator(minesLabel));
 
@@ -228,21 +229,5 @@ public class SettingsFrame extends JDialog {
 
     public JTextField getWidthField() {
         return widthField;
-    }
-
-    public JRadioButton getEasyButton() {
-        return easyButton;
-    }
-
-    public JRadioButton getMediumButton() {
-        return mediumButton;
-    }
-
-    public JRadioButton getHardButton() {
-        return hardButton;
-    }
-
-    public JRadioButton getSpecButton() {
-        return specButton;
     }
 }

@@ -65,7 +65,6 @@ public class GameController {
             new Thread(game).start();
         }
         saver.deleteSaves();
-        System.out.println("created new game.");
     }
 
     public void restartGame(){
@@ -76,11 +75,9 @@ public class GameController {
         timer = new Thread(new Time(timeLabel));
         prepareLevel(level);
         new Thread(new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed)).start();
-        System.out.println("restarted game.");
     }
 
     public void prepareLevel(Level level) {
-        System.out.println("prepare " + level + " level");
         switch (level) {
             case EASY:
                 height = 9;
@@ -126,6 +123,7 @@ public class GameController {
                 buttonPanel.add(butts[j][i]);
             }
         }
+        timer = new Thread(new Time(timeLabel));
         Game game = new Game(h, w, butts, timeLabel, flagLabel, restoreLevel, timer, seed);
         game.setModel(restoreModel);
         new Thread(game).start();
@@ -147,6 +145,10 @@ public class GameController {
 
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    public JLabel getTimeLabel() {
+        return timeLabel;
     }
 
     public static GameController gameController(JLabel timeLabel, JLabel flagLabel, JPanel buttonPanel, JButton[][] buttons, Level level){

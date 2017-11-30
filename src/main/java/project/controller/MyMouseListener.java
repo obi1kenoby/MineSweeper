@@ -10,12 +10,14 @@ import project.models.Number;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import javax.swing.*;
 
 import project.models.Status;
+import project.view.GameOverFrame;
 import project.view.SettingsFrame;
+import project.view.WinFrame;
 
 /**
  * @author Alexander Naumov on 28.10.2017
@@ -24,9 +26,11 @@ import project.view.SettingsFrame;
 
 public class MyMouseListener implements MouseListener {
 
+    private static long mines;
     private final int x;
     private final int y;
     private long seed;
+    private static int count;
     private Thread timer;
     private JLabel flagLabel;
     private int width;
@@ -71,13 +75,11 @@ public class MyMouseListener implements MouseListener {
                     int mines;
                     try {
                         mines = Integer.parseInt(settingsFrame.getMinesField().getText());
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         mines = 10;
                     }
-                    model = new Model(x +1, y +1, height, width, mines, seed);
-                }
-                else {
+                    model = new Model(x + 1, y + 1, height, width, mines, seed);
+                } else {
                     model = new Model(level, x + 1, y + 1, seed);
                 }
                 model.initialCell();
@@ -88,27 +90,36 @@ public class MyMouseListener implements MouseListener {
                 listenersList.forEach(listener -> listener.setModel(model));
                 GameController gameController = GameController.gameController();
                 gameController.setModel(model);
+                mines = model.getCells().stream().filter(cell -> cell.getStatus().equals(Status.MINE)).count();
+                flagLabel.setText(Long.toString(mines));
                 timer.start();
-            }
-            else{
-                timer.start();
+                count = 0;
+            } else {
+                if (timer.getState() == Thread.State.NEW) {
+                    timer.start();
+                }
             }
             openButton(x, y);
         }
-        //todo right click, flag selecting
+
         if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+            int flagCounter = Integer.parseInt(flagLabel.getText());
             if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(flag)) {
                 buttons[x][y].setEnabled(true);
-                buttons[x][y].setDisabledIcon(def);
-            } else if (buttons[y][x].isEnabled()) {
+                buttons[x][y].setIcon(def);
+                flagCounter++;
+            } else if (buttons[x][y].isEnabled()) {
                 buttons[x][y].setEnabled(false);
                 buttons[x][y].setDisabledIcon(flag);
-                int counter = Integer.parseInt(flagLabel.getText());
-                counter++;
-                flagLabel.setText(Integer.toString(counter));
-                timer.interrupt();
+                flagCounter--;
+            }
+            flagLabel.setText(Integer.toString(flagCounter));
+            if (timer.getState() == Thread.State.NEW) {
+                timer.start();
             }
         }
+
+        win();
     }
 
     @Override
@@ -220,10 +231,12 @@ public class MyMouseListener implements MouseListener {
                                 openButton(x - 1, y - 1);
                             }
                         }
+                        count++;
                         break;
                     case NUMBER:
                         int value = ((Number) cell).getValue();
                         setNumber(buttons[x][y], value);
+                        count++;
                         break;
                     case MINE:
                         buttons[x][y].setEnabled(false);
@@ -232,6 +245,17 @@ public class MyMouseListener implements MouseListener {
                         new Thread(new GameOver(model, buttons)).start();
                 }
             }
+        }
+    }
+
+    private void win(){
+        if ((model.getCells().size() - count) <= mines){
+            timer.interrupt();
+            GameController gameController = GameController.gameController();
+            WinFrame winFrame = WinFrame.getWinFrame();
+            winFrame.setTime(gameController.getTimeLabel().getText());
+            winFrame.setDate(new Date());
+            winFrame.visibleControl();
         }
     }
 

@@ -1,8 +1,8 @@
 package project.view;
 
-import project.controller.GameController;
-
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -15,13 +15,10 @@ import javax.swing.border.EtchedBorder;
 
 public class GameOverFrame extends JDialog {
 
-    private JLabel time;
-    private JLabel bestTime;
-    private JLabel totalGames;
-    private JLabel wins;
-    private JLabel bestDate;
-    private JLabel winStatistic;
+    private JLabel cal;
+    private JLabel timer;
     private static GameOverFrame gameOverFrame;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     private GameOverFrame() {
         super();
@@ -30,7 +27,7 @@ public class GameOverFrame extends JDialog {
 
         JPanel rootPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(gridLayout);
-        GridLayout statLayout = new GridLayout(2, 3);
+        GridLayout statLayout = new GridLayout(1, 3);
         JPanel statPanel = new JPanel(statLayout);
         statPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
@@ -67,41 +64,21 @@ public class GameOverFrame extends JDialog {
         rootPanel.add(new JPanel(), "West");
         rootPanel.add(new JPanel(), "East");
 
-        JLabel times = new JLabel("Время:");
+        JLabel timeLabel = new JLabel("Время:");
+        timer = new JLabel();
+        timer.setForeground(Color.red);
         JPanel timePanel = new JPanel();
-        timePanel.add(times);
-        timePanel.add(new JLabel("1 сек."));
+        timePanel.add(timeLabel);
+        timePanel.add(timer);
         statPanel.add(timePanel);
 
-        JPanel dates = new JPanel();
+        JPanel datePanel = new JPanel();
         JLabel dateLabel = new JLabel("Дата:");
-        dates.add(dateLabel);
-        dates.add(new JLabel(" 15.11.2017"));
-        statPanel.add(dates);
-
-        JPanel win = new JPanel();
-        JLabel winLabel = new JLabel("Выиграно:");
-        win.add(winLabel);
-        win.add(new JLabel(" 10"));
-        statPanel.add(win);
-
-        JPanel best = new JPanel();
-        JLabel bestLabel = new JLabel("Лучшее время:");
-        best.add(bestLabel);
-        best.add(new JLabel(" 61 сек."));
-        statPanel.add(best);
-
-        JPanel total = new JPanel();
-        JLabel totalLabel = new JLabel("Проведено игр:");
-        total.add(totalLabel);
-        total.add(new JLabel(" 2"));
-        statPanel.add(total);
-
-        JPanel persent = new JPanel();
-        JLabel persentLabel = new JLabel("Процент:");
-        persent.add(persentLabel);
-        persent.add(new JLabel(" 20%"));
-        statPanel.add(persent);
+        cal = new JLabel();
+        cal.setForeground(Color.red);
+        datePanel.add(dateLabel);
+        datePanel.add(cal);
+        statPanel.add(datePanel);
 
         buttonPanel.add(exit);
         buttonPanel.add(restart);
@@ -117,7 +94,7 @@ public class GameOverFrame extends JDialog {
 
         add(rootPanel);
         setResizable(false);
-        setSize(420, 180);
+        pack();
         setTitle("Игра окончена");
         setLocationRelativeTo(null);
         setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
@@ -132,15 +109,18 @@ public class GameOverFrame extends JDialog {
         }
     }
 
+    public void setTime(String t){
+        timer.setText(t);
+    }
+
+    public void setDate(Date d){
+        cal.setText(sdf.format(d));
+    }
+
     public static GameOverFrame getGameOverFrame(){
         if (gameOverFrame == null){
             gameOverFrame = new GameOverFrame();
         }
         return gameOverFrame;
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        new GameOverFrame();
     }
 }

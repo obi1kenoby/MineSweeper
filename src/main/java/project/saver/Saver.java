@@ -42,7 +42,6 @@ public class Saver {
             objects[3] = flags;
             objects[4] = level;
             ous.writeObject(objects);
-            System.out.println("game successfully saved.");
         }
         catch (Exception e){
             System.out.println("saving game files failed.");
@@ -52,7 +51,6 @@ public class Saver {
     public Object[] read(){
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(path)))){
             objects = (Object[]) ois.readObject();
-            System.out.println("game successfully restoring.");
         }
         catch (Exception e){
             System.out.println("restoring game files failed.");
