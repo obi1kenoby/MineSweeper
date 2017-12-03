@@ -3,6 +3,7 @@ package project.view;
 
 import project.controller.GameController;
 import project.helpers.FieldSizeValidator;
+import project.helpers.MineSizeValidator;
 import project.level.Level;
 
 import javax.swing.*;
@@ -57,7 +58,7 @@ public class SettingsFrame extends JDialog {
         widthField.setInputVerifier(new FieldSizeValidator(widthLabel));
         //todo verification of mines field
         minesField = new JTextField(5);
-        //minesField.setInputVerifier(new FieldSizeValidator(minesLabel));
+        minesField.setInputVerifier(new MineSizeValidator(minesLabel));
 
         heightField.setEnabled(false);
         widthField.setEnabled(false);
@@ -84,22 +85,30 @@ public class SettingsFrame extends JDialog {
         specButton.setFocusPainted(false);
 
         easyButton.addActionListener(e -> {
-            level = Level.EASY;
             hideSpecialMode();
+            level = Level.EASY;
+            hideFields();
         });
         mediumButton.addActionListener(e -> {
-            level = Level.MEDIUM;
             hideSpecialMode();
+            level = Level.MEDIUM;
+            hideFields();
+
         });
         hardButton.addActionListener(e -> {
-            level = Level.HARD;
             hideSpecialMode();
+            level = Level.HARD;
+            hideFields();
+
         });
         specButton.addActionListener(e -> {
             level = Level.SPECIAL;
             heightLabel.setForeground(Color.black);
             widthLabel.setForeground(Color.black);
             minesLabel.setForeground(Color.black);
+            heightField.setFocusable(true);
+            widthField.setFocusable(true);
+            minesField.setFocusable(true);
             heightField.setEnabled(true);
             widthField.setEnabled(true);
             minesField.setEnabled(true);
@@ -123,8 +132,9 @@ public class SettingsFrame extends JDialog {
         ok.setFocusPainted(false);
 
         ok.addActionListener(e -> {
-            if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)) {
-                if (level.equals(Level.SPECIAL)) {
+
+            if (level.equals(Level.SPECIAL)) {
+                if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)) {
                     try {
                         int h = Integer.parseInt(heightField.getText());
                         int w = Integer.parseInt(widthField.getText());
@@ -133,14 +143,21 @@ public class SettingsFrame extends JDialog {
                         JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
                     }
                 }
+
+                if (heightField.getText().equals("") || widthField.getText().equals("") || minesField.getText().equals("")){
+                    heightLabel.setForeground(Color.red);
+                    widthLabel.setForeground(Color.red);
+                    minesLabel.setForeground(Color.red);
+                }
+            }
+
+            if (heightLabel.getForeground().equals(Color.black) && widthLabel.getForeground().equals(Color.black) && minesLabel.getForeground().equals(Color.black)){
                 gameController.setLevel(level);
                 gameController.newGame();
                 GameFrame gameFrame = GameFrame.getFrame();
                 visibleControl();
                 gameFrame.repaint();
                 gameFrame.pack();
-            } else {
-                JOptionPane.showMessageDialog(null, "Неверные или неполные параметры!");
             }
         });
         close.addActionListener(e -> visibleControl());
@@ -177,6 +194,18 @@ public class SettingsFrame extends JDialog {
         setTitle("Параметры");
         setResizable(false);
         setLocationRelativeTo(null);
+    }
+
+    private void hideFields(){
+        heightField.setText("");
+        heightField.setFocusable(false);
+        widthField.setText("");
+        widthField.setFocusable(false);
+        minesField.setText("");
+        minesField.setFocusable(false);
+        heightLabel.setForeground(Color.black);
+        widthLabel.setForeground(Color.black);
+        minesLabel.setForeground(Color.black);
     }
 
     private void hideSpecialMode() {

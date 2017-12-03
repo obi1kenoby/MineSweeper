@@ -28,11 +28,6 @@ public class FieldSizeValidator extends InputVerifier {
             case "Ширина (9-30)":
                 expression = "(9|1[0-9]|2[0-9]|30)";
                 break;
-            case "Мины (10-688)":
-                //todo regex between 10 to mines
-                //expression = "([0-9])";
-                expression = "(9|1[0-9]|2[0-9]|30)";
-                break;
         }
         if (!settingsFrame.getHeightField().getText().equals("") && !settingsFrame.getWidthField().getText().equals("")){
             int height = Integer.parseInt(settingsFrame.getHeightField().getText());
