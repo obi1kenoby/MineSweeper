@@ -25,9 +25,6 @@ public final class GameFrame extends JFrame {
     private JPanel buttonPanel;
     private int heightField;
     private int widthField;
-    private final ImageIcon titleIcon = new ImageIcon("src/main/resources/title.png");
-    private final ImageIcon alarm = new ImageIcon("src/main/resources/alarm.png");
-    private final ImageIcon flagImage = new ImageIcon("src/main/resources/flagIcon.png");
 
     private GameFrame(Level level) {
         switch (level) {
@@ -74,7 +71,7 @@ public final class GameFrame extends JFrame {
 
         JLabel timeIcon = new JLabel();
         timeIcon.setPreferredSize(new Dimension(20, 20));
-        timeIcon.setIcon(alarm);
+        timeIcon.setIcon(new ImageIcon(getClass().getClassLoader().getResource("alarm.png")));
 
         JLabel empty = new JLabel();
         empty.setPreferredSize(new Dimension(25, 20));
@@ -89,7 +86,7 @@ public final class GameFrame extends JFrame {
 
         JLabel flag = new JLabel();
         flag.setPreferredSize(new Dimension(20, 20));
-        flag.setIcon(flagImage);
+        flag.setIcon(new ImageIcon(getClass().getClassLoader().getResource("flagIcon.png")));
 
         buttons = new JButton[widthField][heightField];
         for (int x = 0; x < widthField; x++) {
@@ -133,7 +130,7 @@ public final class GameFrame extends JFrame {
 
         setResizable(false);
         setTitle("Mines v.1.0.1");
-        setIconImage(titleIcon.getImage());
+        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("title.png")).getImage());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         newGame.addActionListener(e -> {

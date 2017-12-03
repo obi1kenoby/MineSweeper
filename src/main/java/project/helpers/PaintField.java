@@ -13,7 +13,6 @@ public class PaintField implements Runnable{
     private final int height;
     private final int width;
     private final JButton[][] buttons;
-    private final ImageIcon image = new ImageIcon("src/main/resources/default.png");
 
     public PaintField(int height, int width, JButton[][] buttons) {
         this.height = height;
@@ -29,7 +28,7 @@ public class PaintField implements Runnable{
             int x = xs.get(random.nextInt(xs.size()));
             List<Integer> ys = yRange(x);
             int y = ys.get(random.nextInt(ys.size()));
-            buttons[x][y].setIcon(image);
+            buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("default.png")));
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

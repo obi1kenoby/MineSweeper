@@ -38,19 +38,19 @@ public class MyMouseListener implements MouseListener {
     private Level level;
     private List<MyMouseListener> listenersList;
     private final JButton[][] buttons;
-    private final ImageIcon accentuated = new ImageIcon("src/main/resources/accentuated.png");
-    private final ImageIcon def = new ImageIcon("src/main/resources/default.png");
-    private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
-    private final ImageIcon flag = new ImageIcon("src/main/resources/flag.png");
-    private final ImageIcon empty = new ImageIcon("src/main/resources/empty.png");
-    private final ImageIcon one = new ImageIcon("src/main/resources/1.png");
-    private final ImageIcon two = new ImageIcon("src/main/resources/2.png");
-    private final ImageIcon three = new ImageIcon("src/main/resources/3.png");
-    private final ImageIcon four = new ImageIcon("src/main/resources/4.png");
-    private final ImageIcon five = new ImageIcon("src/main/resources/5.png");
-    private final ImageIcon six = new ImageIcon("src/main/resources/6.png");
-    private final ImageIcon seven = new ImageIcon("src/main/resources/7.png");
-    private final ImageIcon eight = new ImageIcon("src/main/resources/8.png");
+    //private final ImageIcon accentuated = new ImageIcon("src/main/resources/accentuated.png");
+   // private final ImageIcon def = new ImageIcon("src/main/resources/default.png");
+   // private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
+   // private final ImageIcon flag = new ImageIcon("src/main/resources/flag.png");
+   // private final ImageIcon empty = new ImageIcon("src/main/resources/empty.png");
+   // private final ImageIcon one = new ImageIcon("src/main/resources/1.png");
+   // private final ImageIcon two = new ImageIcon("src/main/resources/2.png");
+   // private final ImageIcon three = new ImageIcon("src/main/resources/3.png");
+   // private final ImageIcon four = new ImageIcon("src/main/resources/4.png");
+   // private final ImageIcon five = new ImageIcon("src/main/resources/5.png");
+   // private final ImageIcon six = new ImageIcon("src/main/resources/6.png");
+   // private final ImageIcon seven = new ImageIcon("src/main/resources/7.png");
+   // private final ImageIcon eight = new ImageIcon("src/main/resources/8.png");
 
     public MyMouseListener(List<MyMouseListener> listenersList, JLabel flagLabel, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
         this.listenersList = listenersList;
@@ -103,13 +103,13 @@ public class MyMouseListener implements MouseListener {
 
         if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
             int flagCounter = Integer.parseInt(flagLabel.getText());
-            if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(flag)) {
+            if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(new ImageIcon(getClass().getClassLoader().getResource("flag.png")))) {
                 buttons[x][y].setEnabled(true);
-                buttons[x][y].setIcon(def);
+                buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("default.png")));
                 flagCounter++;
             } else if (buttons[x][y].isEnabled()) {
                 buttons[x][y].setEnabled(false);
-                buttons[x][y].setDisabledIcon(flag);
+                buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("flag.png")));
                 flagCounter--;
             }
             flagLabel.setText(Integer.toString(flagCounter));
@@ -133,40 +133,40 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        buttons[x][y].setIcon(accentuated);
+        buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("accentuated.png")));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        buttons[x][y].setIcon(def);
+        buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("default.png")));
     }
 
     private void setNumber(JButton button, int value) {
         button.setEnabled(false);
         switch (value) {
             case 1:
-                button.setDisabledIcon(one);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("1.png")));
                 break;
             case 2:
-                button.setDisabledIcon(two);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("2.png")));
                 break;
             case 3:
-                button.setDisabledIcon(three);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("3.png")));
                 break;
             case 4:
-                button.setDisabledIcon(four);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("4.png")));
                 break;
             case 5:
-                button.setDisabledIcon(five);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("5.png")));
                 break;
             case 6:
-                button.setDisabledIcon(six);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("6.png")));
                 break;
             case 7:
-                button.setDisabledIcon(seven);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("7.png")));
                 break;
             case 8:
-                button.setDisabledIcon(eight);
+                button.setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("8.png")));
                 break;
         }
     }
@@ -181,7 +181,7 @@ public class MyMouseListener implements MouseListener {
                 switch (status) {
                     case EMPTY:
                         buttons[x][y].setEnabled(false);
-                        buttons[x][y].setDisabledIcon(empty);
+                        buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("empty.png")));
                         if (x == 0) {
                             openButton(x + 1, y);
                             if (y == 0) {
@@ -239,7 +239,7 @@ public class MyMouseListener implements MouseListener {
                         break;
                     case MINE:
                         buttons[x][y].setEnabled(false);
-                        buttons[x][y].setDisabledIcon(mine);
+                        buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("mine.png")));
                         timer.interrupt();
                         new Thread(new GameOver(model, buttons)).start();
                 }
