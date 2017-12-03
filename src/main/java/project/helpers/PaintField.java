@@ -13,7 +13,7 @@ public class PaintField implements Runnable{
     private final int height;
     private final int width;
     private final JButton[][] buttons;
-    private final ImageIcon image = new ImageIcon("images/default.png");
+    private final ImageIcon image = new ImageIcon("src/main/resources/default.png");
 
     public PaintField(int height, int width, JButton[][] buttons) {
         this.height = height;

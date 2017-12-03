@@ -20,16 +20,14 @@ public class Game implements Runnable {
     private long seed;
     private Thread timer;
     private JButton[][] buttons;
-    private JLabel timeLabel;
     private JLabel flagLabel;
     private Model model;
     private Level level;
 
-    public Game(int height, int width, JButton[][] buttons, JLabel timeLabel, JLabel flagLabel, Level level, Thread timer, long seed) {
+    public Game(int height, int width, JButton[][] buttons, JLabel flagLabel, Level level, Thread timer, long seed) {
         this.height = height;
         this.width = width;
         this.buttons = buttons;
-        this.timeLabel = timeLabel;
         this.flagLabel = flagLabel;
         this.level = level;
         this.timer = timer;

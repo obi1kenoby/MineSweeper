@@ -9,6 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * @author Alexander Naumov on 26.10.2017
+ * @version 1.0.0
+ */
 
 public class GameController {
 
@@ -55,13 +59,13 @@ public class GameController {
             int dialogResult = JOptionPane.showConfirmDialog(null,"Продолжить сохраненную игру ?","Обнаружена сохраненная игра.", JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.NO_OPTION){
                 prepareLevel(level);
-                Game game = new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed);
+                Game game = new Game(height, width, buttons, flagLabel, level, timer, seed);
                 new Thread(game).start();
             }
         }
         else {
             prepareLevel(level);
-            Game game = new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed);
+            Game game = new Game(height, width, buttons, flagLabel, level, timer, seed);
             new Thread(game).start();
         }
         saver.deleteSaves();
@@ -74,7 +78,7 @@ public class GameController {
 
         timer = new Thread(new Time(timeLabel));
         prepareLevel(level);
-        new Thread(new Game(height, width, buttons, timeLabel, flagLabel, level, timer, seed)).start();
+        new Thread(new Game(height, width, buttons, flagLabel, level, timer, seed)).start();
     }
 
     public void prepareLevel(Level level) {
@@ -124,7 +128,7 @@ public class GameController {
             }
         }
         timer = new Thread(new Time(timeLabel));
-        Game game = new Game(h, w, butts, timeLabel, flagLabel, restoreLevel, timer, seed);
+        Game game = new Game(h, w, butts, flagLabel, restoreLevel, timer, seed);
         game.setModel(restoreModel);
         new Thread(game).start();
         buttons = butts;

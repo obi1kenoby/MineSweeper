@@ -6,6 +6,10 @@ import project.view.SettingsFrame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Alexander Naumov on 26.10.2017
+ * @version 1.0.0
+ */
 
 public class MineSizeValidator extends InputVerifier {
 

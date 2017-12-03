@@ -25,12 +25,11 @@ public final class GameFrame extends JFrame {
     private JPanel buttonPanel;
     private int heightField;
     private int widthField;
-    private final ImageIcon titleIcon = new ImageIcon("images\\title.png");
-    private final ImageIcon alarm = new ImageIcon("images\\alarm.png");
-    private final ImageIcon flagImage = new ImageIcon("images\\flagicon.png");
+    private final ImageIcon titleIcon = new ImageIcon("src/main/resources/title.png");
+    private final ImageIcon alarm = new ImageIcon("src/main/resources/alarm.png");
+    private final ImageIcon flagImage = new ImageIcon("src/main/resources/flagIcon.png");
 
     private GameFrame(Level level) {
-        Level level1 = level;
         switch (level) {
             case EASY:
                 widthField = 9;

@@ -12,12 +12,11 @@ import java.net.URISyntaxException;
 
 public class InfoFrame extends JDialog {
 
-    private final ImageIcon image = new ImageIcon("images\\info.png");
+    private final ImageIcon image = new ImageIcon("src/main/resources/info.png");
     private static InfoFrame infoFrame;
 
     private InfoFrame(){
         Font myFont = new Font("Arial", Font.BOLD, 12);
-
         JLabel label = new JLabel();
         label.setIcon(image);
         JPanel root = new JPanel(new BorderLayout());

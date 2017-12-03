@@ -7,6 +7,11 @@ import project.models.Model;
 import javax.swing.*;
 import java.io.*;
 
+/**
+ * @author Alexander Naumov on 24.10.2017
+ * @version 1.0.0
+ */
+
 public class Saver {
 
     private String path;

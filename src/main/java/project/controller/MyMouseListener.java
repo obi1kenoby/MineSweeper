@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.*;
 
 import project.models.Status;
-import project.view.GameOverFrame;
 import project.view.SettingsFrame;
 import project.view.WinFrame;
 
@@ -39,19 +38,19 @@ public class MyMouseListener implements MouseListener {
     private Level level;
     private List<MyMouseListener> listenersList;
     private final JButton[][] buttons;
-    private final ImageIcon accentuated = new ImageIcon("images/accentuated.png");
-    private final ImageIcon def = new ImageIcon("images/default.png");
-    private final ImageIcon mine = new ImageIcon("images/mine.png");
-    private final ImageIcon flag = new ImageIcon("images/flag.png");
-    private final ImageIcon empty = new ImageIcon("images/empty.png");
-    private final ImageIcon one = new ImageIcon("images/1.png");
-    private final ImageIcon two = new ImageIcon("images/2.png");
-    private final ImageIcon three = new ImageIcon("images/3.png");
-    private final ImageIcon four = new ImageIcon("images/4.png");
-    private final ImageIcon five = new ImageIcon("images/5.png");
-    private final ImageIcon six = new ImageIcon("images/6.png");
-    private final ImageIcon seven = new ImageIcon("images/7.png");
-    private final ImageIcon eight = new ImageIcon("images/8.png");
+    private final ImageIcon accentuated = new ImageIcon("src/main/resources/accentuated.png");
+    private final ImageIcon def = new ImageIcon("src/main/resources/default.png");
+    private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
+    private final ImageIcon flag = new ImageIcon("src/main/resources/flag.png");
+    private final ImageIcon empty = new ImageIcon("src/main/resources/empty.png");
+    private final ImageIcon one = new ImageIcon("src/main/resources/1.png");
+    private final ImageIcon two = new ImageIcon("src/main/resources/2.png");
+    private final ImageIcon three = new ImageIcon("src/main/resources/3.png");
+    private final ImageIcon four = new ImageIcon("src/main/resources/4.png");
+    private final ImageIcon five = new ImageIcon("src/main/resources/5.png");
+    private final ImageIcon six = new ImageIcon("src/main/resources/6.png");
+    private final ImageIcon seven = new ImageIcon("src/main/resources/7.png");
+    private final ImageIcon eight = new ImageIcon("src/main/resources/8.png");
 
     public MyMouseListener(List<MyMouseListener> listenersList, JLabel flagLabel, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
         this.listenersList = listenersList;

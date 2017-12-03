@@ -8,6 +8,11 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Alexander Naumov on 24.10.2017
+ * @version 1.0.0
+ */
+
 public class FieldSizeValidator extends InputVerifier {
 
     private int mines = 590;

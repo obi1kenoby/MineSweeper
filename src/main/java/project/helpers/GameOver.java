@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class GameOver implements Runnable {
 
-    private final ImageIcon mine = new ImageIcon("images/mine.png");
+    private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
     private JButton[][] buttons;
     private Model model;
 

@@ -8,6 +8,10 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author Alexander Naumov on 19.11.2017.
+ * @version 1.0.0
+ */
 
 public class WinFrame extends JDialog {
 
