@@ -21,6 +21,9 @@ public class FieldSizeValidator extends InputVerifier {
     private boolean regExpValid(JComponent input) {
         SettingsFrame settingsFrame = SettingsFrame.getSettingFrame();
         String expression = "";
+        if (expression.equals("")){
+            return true;
+        }
         switch (label.getText()) {
             case "Высота (9-24)":
                 expression = "(9|1[0-9]|2[0-4])";
