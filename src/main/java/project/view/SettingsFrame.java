@@ -189,10 +189,10 @@ public class SettingsFrame extends JDialog {
 
         add(root);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(320, 275);
         setTitle("Параметры");
         setResizable(false);
         setLocationRelativeTo(null);
+        pack();
     }
 
     private void hideFields(){

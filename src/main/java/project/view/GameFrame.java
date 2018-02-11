@@ -47,8 +47,8 @@ public final class GameFrame extends JFrame {
         settingsFrame.setGameController(mainController);
         infoFrame = InfoFrame.getInfoFrame();
         setVisible(true);
-        pack();
         setLocationRelativeTo(null);
+        pack();
     }
 
     private void init() {
@@ -62,7 +62,7 @@ public final class GameFrame extends JFrame {
 
         buttonPanel.setPreferredSize(new Dimension(200, 200));
         timeLabel = new JLabel("00:00", SwingConstants.CENTER);
-        timeLabel.setPreferredSize(new Dimension(40, 20));
+        timeLabel.setPreferredSize(new Dimension(50, 20));
         timeLabel.setOpaque(true);
         timeLabel.setForeground(Color.white);
         timeLabel.setBackground(new Color(60, 90, 255));
@@ -86,7 +86,7 @@ public final class GameFrame extends JFrame {
 
         JLabel flag = new JLabel();
         flag.setPreferredSize(new Dimension(20, 20));
-        flag.setIcon(new ImageIcon(getClass().getClassLoader().getResource("flagIcon.png")));
+        flag.setIcon(new ImageIcon(getClass().getClassLoader().getResource("flagicon.png")));
 
         buttons = new JButton[widthField][heightField];
         for (int x = 0; x < widthField; x++) {

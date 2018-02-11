@@ -60,9 +60,10 @@ public class InfoFrame extends JDialog {
         add(root);
 
         setTitle("О программе \"Minesweeper\"");
-        setSize(300, 300);
+        //setSize(300, 300);
         setResizable(false);
         setLocationRelativeTo(null);
+        pack();
     }
 
     public static InfoFrame getInfoFrame(){

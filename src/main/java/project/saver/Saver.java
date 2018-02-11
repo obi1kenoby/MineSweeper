@@ -26,7 +26,7 @@ public class Saver {
             path = "C:\\mines.dat";
         }
         else {
-            path = "usr/Documents/mines.dat";
+            path = "/home/alex/Documents/mines.dat";
         }
         file = new File(path);
     }

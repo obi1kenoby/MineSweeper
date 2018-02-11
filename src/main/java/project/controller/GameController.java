@@ -100,6 +100,7 @@ public class GameController {
         buttonPanel.setPreferredSize(new Dimension((width * 23) - 2, (height * 23) - 2));
         buttonPanel.setLayout(new GridLayout(height, width, 1, 1));
         buttons = new JButton[width][height];
+        flagLabel.setText("0");
         timeLabel.setText("00:00");
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

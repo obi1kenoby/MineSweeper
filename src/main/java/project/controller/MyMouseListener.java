@@ -38,19 +38,6 @@ public class MyMouseListener implements MouseListener {
     private Level level;
     private List<MyMouseListener> listenersList;
     private final JButton[][] buttons;
-    //private final ImageIcon accentuated = new ImageIcon("src/main/resources/accentuated.png");
-   // private final ImageIcon def = new ImageIcon("src/main/resources/default.png");
-   // private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
-   // private final ImageIcon flag = new ImageIcon("src/main/resources/flag.png");
-   // private final ImageIcon empty = new ImageIcon("src/main/resources/empty.png");
-   // private final ImageIcon one = new ImageIcon("src/main/resources/1.png");
-   // private final ImageIcon two = new ImageIcon("src/main/resources/2.png");
-   // private final ImageIcon three = new ImageIcon("src/main/resources/3.png");
-   // private final ImageIcon four = new ImageIcon("src/main/resources/4.png");
-   // private final ImageIcon five = new ImageIcon("src/main/resources/5.png");
-   // private final ImageIcon six = new ImageIcon("src/main/resources/6.png");
-   // private final ImageIcon seven = new ImageIcon("src/main/resources/7.png");
-   // private final ImageIcon eight = new ImageIcon("src/main/resources/8.png");
 
     public MyMouseListener(List<MyMouseListener> listenersList, JLabel flagLabel, int x, int y, Level level, int width, int height, JButton[][] buttons, Thread timer) {
         this.listenersList = listenersList;
@@ -66,8 +53,8 @@ public class MyMouseListener implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int modifiers = e.getModifiers();
-        if ((modifiers & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+        int modifiers = e.getModifiersEx();
+        if ((modifiers & InputEvent.BUTTON1_DOWN_MASK) == InputEvent.BUTTON1_DOWN_MASK) {
             if (model == null) {
                 if (level.equals(Level.SPECIAL)) {
                     SettingsFrame settingsFrame = SettingsFrame.getSettingFrame();
@@ -101,20 +88,22 @@ public class MyMouseListener implements MouseListener {
             openButton(x, y);
         }
 
-        if ((modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
-            int flagCounter = Integer.parseInt(flagLabel.getText());
-            if (!buttons[x][y].isEnabled() && buttons[x][y].getDisabledIcon().equals(new ImageIcon(getClass().getClassLoader().getResource("flag.png")))) {
-                buttons[x][y].setEnabled(true);
-                buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("default.png")));
-                flagCounter++;
-            } else if (buttons[x][y].isEnabled()) {
-                buttons[x][y].setEnabled(false);
-                buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("flag.png")));
-                flagCounter--;
-            }
-            flagLabel.setText(Integer.toString(flagCounter));
-            if (timer.getState() == Thread.State.NEW) {
-                timer.start();
+        if (model != null) {
+            if ((modifiers & InputEvent.BUTTON3_DOWN_MASK) == InputEvent.BUTTON3_DOWN_MASK) {
+                int flagCounter = Integer.parseInt(flagLabel.getText());
+                if (!buttons[x][y].isEnabled() && ((ImageIcon) buttons[x][y].getDisabledIcon()).getImage().equals(new ImageIcon(getClass().getClassLoader().getResource("flag.png")).getImage())) {
+                    buttons[x][y].setEnabled(true);
+                    buttons[x][y].setIcon(new ImageIcon(getClass().getClassLoader().getResource("default.png")));
+                    flagCounter++;
+                } else if (buttons[x][y].isEnabled()) {
+                    buttons[x][y].setEnabled(false);
+                    buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("flag.png")));
+                    flagCounter--;
+                }
+                flagLabel.setText(Integer.toString(flagCounter));
+                if (timer.getState() == Thread.State.NEW) {
+                    timer.start();
+                }
             }
         }
 
@@ -240,7 +229,6 @@ public class MyMouseListener implements MouseListener {
                     case MINE:
                         buttons[x][y].setEnabled(false);
                         buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("mine.png")));
-                        timer.interrupt();
                         new Thread(new GameOver(model, buttons)).start();
                 }
             }
@@ -248,7 +236,7 @@ public class MyMouseListener implements MouseListener {
     }
 
     private void win(){
-        if ((model.getCells().size() - count) <= mines){
+        if (model != null && (model.getCells().size() - count) <= mines){
             timer.interrupt();
             GameController gameController = GameController.gameController();
             WinFrame winFrame = WinFrame.getWinFrame();
