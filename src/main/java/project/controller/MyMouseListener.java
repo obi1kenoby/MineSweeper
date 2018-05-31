@@ -10,6 +10,7 @@ import project.models.Number;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.swing.*;
@@ -227,6 +228,7 @@ public class MyMouseListener implements MouseListener {
                         count++;
                         break;
                     case MINE:
+                        timer.interrupt();
                         buttons[x][y].setEnabled(false);
                         buttons[x][y].setDisabledIcon(new ImageIcon(getClass().getClassLoader().getResource("mine.png")));
                         new Thread(new GameOver(model, buttons)).start();

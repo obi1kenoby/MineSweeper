@@ -4,6 +4,7 @@ import project.controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,12 +34,10 @@ public class WinFrame extends JDialog {
         JPanel north = new JPanel();
         north.setBorder(new EmptyBorder(10,10,10,10));
         JLabel northLabel = new JLabel("Поздравляем, вы выиграли!", SwingConstants.CENTER);
-        JPanel center = new JPanel(new GridLayout(1, 2));
-        center.setBorder(new EmptyBorder(1,35,5,35));
+        JPanel center = new JPanel(new GridLayout(1, 2, 10, 10));
+        center.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         JPanel timePanel = new JPanel();
-        timePanel.setPreferredSize(new Dimension(100, 10));
         JPanel datePanel = new JPanel();
-        datePanel.setPreferredSize(new Dimension(100, 10));
         JLabel timeLabel = new JLabel("Время: ");
         time = new JLabel();
         time.setForeground(new Color(20, 135, 0));
@@ -46,7 +45,7 @@ public class WinFrame extends JDialog {
         timePanel.add(time);
         JLabel dateLabel = new JLabel("Дата: ");
         date = new JLabel();
-        date.setForeground(new Color(20, 135, 0));
+        date.setForeground(new Color(20, 200, 0));
         datePanel.add(dateLabel);
         datePanel.add(date);
 
@@ -62,9 +61,9 @@ public class WinFrame extends JDialog {
 
         setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
         setTitle("Игра выиграна.");
-        pack();
         setResizable(false);
         setLocationRelativeTo(null);
+        setSize(300, 130);
 
         newGame.addActionListener(e ->{
             gameController = GameController.gameController();

@@ -18,7 +18,6 @@ import java.util.Date;
 
 public class GameOver implements Runnable {
 
-    private final ImageIcon mine = new ImageIcon("src/main/resources/mine.png");
     private JButton[][] buttons;
     private Model model;
 
@@ -35,7 +34,7 @@ public class GameOver implements Runnable {
             for (Cell cell : model.getCells()) {
                 if (cell.getStatus().equals(Status.MINE)) {
                     Thread.sleep(100);
-                    buttons[cell.getX() - 1][cell.getY() - 1].setIcon(mine);
+                    buttons[cell.getX() - 1][cell.getY() - 1].setIcon(new ImageIcon(getClass().getClassLoader().getResource("mine.png")));
                 }
             }
         }catch (Exception e){

@@ -47,7 +47,7 @@ public class Time implements Runnable {
                 }
             }
         } catch (Exception e) {
-            System.out.println("timer was interrupted.");
+            Thread.currentThread().interrupt();
         }
     }
 }

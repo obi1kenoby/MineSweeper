@@ -2,7 +2,6 @@ package project;
 
 import project.level.Level;
 import project.view.GameFrame;
-
 import javax.swing.*;
 import java.awt.*;
 
