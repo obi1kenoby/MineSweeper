@@ -13,7 +13,7 @@ import javax.swing.border.EtchedBorder;
  * @version 1.0.0
  */
 
-public class GameOverFrame extends JDialog {
+public class GameOverFrame extends ChildFrame {
 
     private JLabel cal;
     private JLabel timer;
@@ -96,17 +96,7 @@ public class GameOverFrame extends JDialog {
         setResizable(false);
         pack();
         setTitle("Игра окончена");
-        setLocationRelativeTo(null);
         setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
-    }
-
-    public void visibleControl(){
-        if (isVisible()){
-            setVisible(false);
-        }
-        else{
-            setVisible(true);
-        }
     }
 
     public void setTime(String t){

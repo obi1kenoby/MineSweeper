@@ -3,10 +3,10 @@ package project.view;
 import project.controller.GameController;
 import project.level.Level;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import javax.swing.*;
 
 /**
  * @author Alexander Naumov on 26.10.2017
@@ -46,9 +46,9 @@ public final class GameFrame extends JFrame {
         settingsFrame = SettingsFrame.getSettingFrame();
         settingsFrame.setGameController(mainController);
         infoFrame = InfoFrame.getInfoFrame();
-        setVisible(true);
-        setLocationRelativeTo(null);
         pack();
+        setLocation();
+        setVisible(true);
     }
 
     private void init() {
@@ -140,7 +140,6 @@ public final class GameFrame extends JFrame {
         KeyStroke f2 = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
         newGame.setAccelerator(f2);
 
-
         settings.addActionListener(e -> settingsFrame.visibleControl());
         KeyStroke f5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
         settings.setAccelerator(f5);
@@ -150,7 +149,7 @@ public final class GameFrame extends JFrame {
 
         KeyStroke f1 = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
         info.setAccelerator(f1);
-        info.addActionListener(e -> infoFrame.setVisible(true));
+        info.addActionListener(e -> infoFrame.visibleControl());
 
         close.addActionListener((ActionEvent e) -> {
 
@@ -167,6 +166,13 @@ public final class GameFrame extends JFrame {
                 System.exit(0);
             }
         });
+    }
+
+    private void setLocation() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = screenSize.width/2 - getWidth()/2;
+        int y = screenSize.height/2 - getHeight()/2;
+        setLocation(x, y);
     }
 
     public GameController getMainController() {

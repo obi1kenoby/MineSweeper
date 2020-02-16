@@ -16,7 +16,7 @@ import java.awt.*;
  * @version 1.0.0
  */
 
-public class SettingsFrame extends JDialog {
+public class SettingsFrame extends ChildFrame {
 
     private JRadioButton easyButton;
     private JRadioButton mediumButton;
@@ -191,7 +191,6 @@ public class SettingsFrame extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Параметры");
         setResizable(false);
-        setLocationRelativeTo(null);
         pack();
     }
 
@@ -214,14 +213,6 @@ public class SettingsFrame extends JDialog {
         heightLabel.setEnabled(false);
         widthLabel.setEnabled(false);
         minesLabel.setEnabled(false);
-    }
-
-    public void visibleControl() {
-        if (isVisible()) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
     }
 
     public static SettingsFrame getSettingFrame() {

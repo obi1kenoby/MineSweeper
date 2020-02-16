@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class InfoFrame extends JDialog {
+/**
+ * @author Alexander Naumov.
+ */
+public class InfoFrame extends ChildFrame {
 
     private static InfoFrame infoFrame;
 
@@ -47,7 +50,7 @@ public class InfoFrame extends JDialog {
 
         south.setBorder(new EmptyBorder(1, 120, 1, 120));
         JButton button = new JButton("Ok");
-        button.addActionListener(e -> setVisible(false));
+        button.addActionListener(e -> visibleControl());
         button.setFocusPainted(false);
 
         center.add(textPanel);
@@ -60,9 +63,7 @@ public class InfoFrame extends JDialog {
         add(root);
 
         setTitle("О программе \"Minesweeper\"");
-        //setSize(300, 300);
         setResizable(false);
-        setLocationRelativeTo(null);
         pack();
     }
 

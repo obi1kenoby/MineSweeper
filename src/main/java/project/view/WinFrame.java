@@ -13,8 +13,7 @@ import java.util.Date;
  * @author Alexander Naumov on 19.11.2017.
  * @version 1.0.0
  */
-
-public class WinFrame extends JDialog {
+public class WinFrame extends ChildFrame {
 
     private JLabel time;
     private JLabel date;
@@ -72,14 +71,6 @@ public class WinFrame extends JDialog {
         });
 
         exit.addActionListener(e -> System.exit(0));
-    }
-
-    public void visibleControl() {
-        if (isVisible()) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
     }
 
     public void setTime(String t){
